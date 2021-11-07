@@ -13,19 +13,18 @@ object nivelBloques {
 		// fondo - es importante que sea el primer visual que se agregue
 		game.addVisual(new Fondo(image = "fondoCompleto.png"))
 			// otros visuals, p.ej. bloques o llaves
-		game.addVisual(new Bloque(position = game.at(3, 12)))
 			// personaje, es importante que sea el último visual que se agregue
 		game.addVisual(prota1)
 		game.addVisual(caja)
 			// teclado
 			// este es para probar, no es necesario dejarlo
-		keyboard.t().onPressDo({ self.terminar()})
+		keyboard.t().onPressDo({self.terminar()})
 		game.whenCollideDo(prota1, { e => prota1.empujar(e)})
 			// teclado movimiento:
-		keyboard.up().onPressDo({ prota1.moverArriba()})
-		keyboard.down().onPressDo({ prota1.moverAbajo()})
-		keyboard.right().onPressDo({ prota1.moverDerecha()})
-		keyboard.left().onPressDo({ prota1.moverIzquierda()})
+		keyboard.up().onPressDo({ prota1.moverArriba() prota1.gastarEnergia()})
+		keyboard.down().onPressDo({ prota1.moverAbajo() prota1.gastarEnergia()})
+		keyboard.right().onPressDo({ prota1.moverDerecha() prota1.gastarEnergia()})
+		keyboard.left().onPressDo({ prota1.moverIzquierda() prota1.gastarEnergia()})
 	// en este no hacen falta colisiones
 	}
 

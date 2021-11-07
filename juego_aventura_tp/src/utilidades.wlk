@@ -10,7 +10,6 @@ object utilidadesParaJuego {
 	method numeroArbitrario() {
 		return 0.randomUpTo(30)
 	}
-
 }
 
 object caja {

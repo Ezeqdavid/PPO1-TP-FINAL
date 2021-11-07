@@ -10,8 +10,13 @@ class Protagonista {
 	const property image = "player.png"
 	var property energia = 30
 	var property salud = 30
+	var property dinero = 0
 	var direccion = arriba
-
+	
+	method gastarEnergia(){
+		energia -= 1
+	}
+	
 	method moverDerecha() {
 		direccion = derecha
 		if (!(position.x() == game.width() - 1)) self.avanzar() else self.position(new Position(y = self.position().y(), x = 0))
@@ -45,5 +50,14 @@ class Protagonista {
 	// self.retroceder()
 	}
 
+	method recibirDanio(enemigo){
+		if (enemigo == "Slime"){
+			self.salud(self.salud() - 5)
+		} else if (enemigo == "Goblin") {
+			self.salud(self.salud() - 10)
+		} else if (enemigo == "Orco") {
+			self.salud(self.salud() - 15)
+		}
+	}
 }
 
