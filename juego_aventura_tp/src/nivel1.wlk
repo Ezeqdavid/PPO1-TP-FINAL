@@ -10,21 +10,40 @@ object nivelBloques {
 	const prota1 = new Protagonista()
 
 	method configurate() {
+		
 		// fondo - es importante que sea el primer visual que se agregue
 		game.addVisual(new Fondo(image = "fondoCompleto.png"))
+		
 			// otros visuals, p.ej. bloques o llaves
 			// personaje, es importante que sea el último visual que se agregue
+		//game.addVisual(new VesselMana(position = game.at(1,1)))
+		//game.addVisual(new VesselSalud(position = game.at(1,2)))
+		game.addVisual(new PocionMana(position = game.at(1,3), image = "flask_big_blue.png"))
+		//game.addVisual(new Monedas(position = game.at(1,4))) 
+		
+		game.addVisual(new Cofre(position= game.at(2,3)))
 		game.addVisual(prota1)
-		game.addVisual(caja)
+			
+			
 			// teclado
 			// este es para probar, no es necesario dejarlo
-		keyboard.t().onPressDo({self.terminar()})
-		game.whenCollideDo(prota1, { e => prota1.empujar(e)})
-			// teclado movimiento:
-		keyboard.up().onPressDo({ prota1.moverArriba() prota1.gastarEnergia()})
-		keyboard.down().onPressDo({ prota1.moverAbajo() prota1.gastarEnergia()})
-		keyboard.right().onPressDo({ prota1.moverDerecha() prota1.gastarEnergia()})
-		keyboard.left().onPressDo({ prota1.moverIzquierda() prota1.gastarEnergia()})
+		keyboard.t().onPressDo({ self.terminar()})
+		game.whenCollideDo(prota1, { e => prota1.accionar(e)})
+			
+		// teclado movimiento:
+			
+		keyboard.up().onPressDo({ prota1.moverArriba()
+			prota1.gastarEnergia()
+		})
+		keyboard.down().onPressDo({ prota1.moverAbajo()
+			prota1.gastarEnergia()
+		})
+		keyboard.right().onPressDo({ prota1.moverDerecha()
+			prota1.gastarEnergia()
+		})
+		keyboard.left().onPressDo({ prota1.moverIzquierda()
+			prota1.gastarEnergia()
+		})
 	// en este no hacen falta colisiones
 	}
 

@@ -7,16 +7,16 @@ import direcciones.*
 class Protagonista {
 
 	var property position = game.at(0, 0)
-	const property image = "player.png"
+	const property image = "knight_f_idle_anim_f0.png"
 	var property energia = 30
 	var property salud = 30
 	var property dinero = 0
 	var direccion = arriba
-	
-	method gastarEnergia(){
+
+	method gastarEnergia() {
 		energia -= 1
 	}
-	
+
 	method moverDerecha() {
 		direccion = derecha
 		if (!(position.x() == game.width() - 1)) self.avanzar() else self.position(new Position(y = self.position().y(), x = 0))
@@ -45,13 +45,15 @@ class Protagonista {
 		position = direccion.opuesto().siguiente(position)
 	}
 
-	method empujar(elemento) {
-		elemento.mover(direccion)
+	method accionar(elemento) {
+		elemento.reaccionar(self)
 	// self.retroceder()
 	}
+	
+	method direccion() = direccion
 
-	method recibirDanio(enemigo){
-		if (enemigo == "Slime"){
+	method recibirDanio(enemigo) {
+		if (enemigo == "Slime") {
 			self.salud(self.salud() - 5)
 		} else if (enemigo == "Goblin") {
 			self.salud(self.salud() - 10)
@@ -59,5 +61,6 @@ class Protagonista {
 			self.salud(self.salud() - 15)
 		}
 	}
+
 }
 

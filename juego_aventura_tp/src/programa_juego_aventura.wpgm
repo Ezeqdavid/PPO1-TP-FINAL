@@ -4,10 +4,8 @@ import utilidades.*
 
 program juego_aventura {
 	game.title("Oh qué aventura objetosa")
-	//game.height(utilidadesParaJuego.numeroArbitrario()) 
-	//game.width(utilidadesParaJuego.numeroArbitrario()) 
-	game.height(15)
-	game.width(15)
+	game.height(10)
+	game.width(10)
 	game.boardGround("fondoBlanco.png")
 	nivelBloques.configurate()
 	game.start()

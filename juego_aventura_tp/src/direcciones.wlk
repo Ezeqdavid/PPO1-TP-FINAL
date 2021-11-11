@@ -1,12 +1,12 @@
 class Direccion {
 
-	method siguiente(position)
+	method siguiente(pos)
 
 }
 
 object izquierda inherits Direccion {
 
-	override method siguiente(position) = position.left(1)
+	override method siguiente(pos) = pos.left(1)
 
 	method opuesto() = derecha
 
@@ -14,7 +14,7 @@ object izquierda inherits Direccion {
 
 object derecha inherits Direccion {
 
-	override method siguiente(position) = position.right(1)
+	override method siguiente(pos) = pos.right(1)
 
 	method opuesto() = izquierda
 
@@ -22,7 +22,7 @@ object derecha inherits Direccion {
 
 object abajo inherits Direccion {
 
-	override method siguiente(position) = position.down(1)
+	override method siguiente(pos) = pos.down(1)
 
 	method opuesto() = arriba
 
@@ -30,7 +30,7 @@ object abajo inherits Direccion {
 
 object arriba inherits Direccion {
 
-	override method siguiente(position) = position.up(1)
+	override method siguiente(pos) = pos.up(1)
 
 	method opuesto() = abajo
 
