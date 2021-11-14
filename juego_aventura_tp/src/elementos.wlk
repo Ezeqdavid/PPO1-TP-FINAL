@@ -114,6 +114,7 @@ class Indicador {
 	const property position
 	method reaccionar(personaje)
 	method visualizar(personaje)
+	method esMovible() {return false}
 }
 
 class IndicadorSalud inherits Indicador {

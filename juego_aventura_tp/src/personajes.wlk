@@ -8,7 +8,7 @@ import elementos.*
 // imagen y posición
 class Protagonista {
 
-	var property position = game.at(0, 0)
+	var property position = game.at(0, 1)
 	const property image = "knight_f_idle_anim_f0.png"
 	var property energia = 100
 	var property salud = 30
@@ -33,12 +33,12 @@ class Protagonista {
 
 	method moverArriba() {
 		direccion = arriba
-		if (!(position.y() == game.height() - 1)) self.avanzar() else self.position(new Position(x = self.position().x(), y = 0))
+		if (!(position.y() == game.height() - 1)) self.avanzar() else self.position(new Position(x = self.position().x(), y = 1))
 	}
 
 	method moverAbajo() {
 		direccion = abajo
-		if (!(position.y() == 0)) self.avanzar() else self.position(new Position(x = self.position().x(), y = game.height() - 1))
+		if (!(position.y() == 1)) self.avanzar() else self.position(new Position(x = self.position().x(), y = game.height() - 1))
 	}
 
 	method avanzar() {
