@@ -10,7 +10,7 @@ class Protagonista {
 
 	var property position = game.at(0, 1)
 	const property image = "knight_f_idle_anim_f0.png"
-	var property energia = 30
+	var property energia = 200
 	var property salud = 30
 	var property dinero = 0
 	var direccion = arriba
@@ -18,13 +18,7 @@ class Protagonista {
 
 	method gastarEnergia() {
 		energia -= 1
-		self.verificarContinuidad()
-	}
-	
-	method verificarContinuidad() {
-		if (energia <= 0 or salud <= 0) {
-			nivelBloques.perder()
-		}
+		nivelBloques.verificaFinDeNivel()
 	}
 	
 	method moverDerecha() {
@@ -91,6 +85,12 @@ class Protagonista {
 		objetos.addAll(game.getObjectsIn(position.up(1)))
 		objetos.addAll(game.getObjectsIn(position.down(1)))
 		objetos.forEach({o => o.reaccionar(self)})
+	}
+	
+	method esMovible() = false
+	
+	method dejarFragmentos(){
+		fragmentos.clear()
 	}
 }
 

@@ -8,7 +8,6 @@ import utilidades.*
 object nivelBloques {
 
 	const prota1 = new Protagonista()
-	const cofre1 = new Cofre(position = game.at(2,3))
 
 
 	const fragmento1 = new FragmentoEspada(position = utilidadesParaJuego.posicionArbitraria(), image = "Fragment_2_golden_sword.png")
@@ -17,16 +16,12 @@ object nivelBloques {
 	const fragmento4 = new FragmentoEspada(position = utilidadesParaJuego.posicionArbitraria(), image = "Gem_golden_sword.png")
 	const energiaIndicador = new IndicadorEnergia(position = game.at(1,0))
 
-	const escalera = new Escalera(position = utilidadesParaJuego.posicionArbitraria())
-	
-	const forja = new Forja(position = game.at(0.randomUpTo(game.width()), game.height() -2))
-
-
 	method configurate() {
 	
 		// fondo - es importante que sea el primer visual que se agregue
 		game.addVisual(new Fondo(image = "fondoCompleto.png"))
 		
+
 		//forja
 		game.addVisual(forja)
 		
@@ -46,9 +41,12 @@ object nivelBloques {
 		
 
 		
-		//escalera y cofre
+		//escalera y cofres
 		game.addVisual(escalera)
-		game.addVisual(cofre1)
+		
+	    game.addVisual(new Cofre(position = utilidadesParaJuego.posicionArbitrariaParaCofres()))
+		game.addVisual(new Cofre(position = utilidadesParaJuego.posicionArbitrariaParaCofres()))
+		game.addVisual(new Cofre(position = utilidadesParaJuego.posicionArbitrariaParaCofres()))
 		
 		// fragmentos de espada
 		game.addVisual(fragmento1)
@@ -70,21 +68,14 @@ object nivelBloques {
 		//game.onCollideDo(prota1, {o => prota1.accionar(o)})
 		
 		game.onCollideDo(escalera, {cofre => escalera.reaccionar(cofre)})
-			
-	
+
 			//teclado
 			// este es para probar, no es necesario dejarlo
 		keyboard.t().onPressDo({ self.terminar()})
 
-		keyboard.i().onPressDo({game.allVisuals().forEach({o => game.say(o, o.toString())})})
-		
-		keyboard.space().onPressDo({game.say(prota1, prota1.informarEstado())})
-		
-		keyboard.x().onPressDo({prota1.interactuar()})
+
 			
-
 		// teclado movimiento:
-
 		keyboard.up().onPressDo({ prota1.moverArriba()
 			prota1.gastarEnergia()
 			energiaIndicador.visualizar(prota1)
@@ -104,7 +95,6 @@ object nivelBloques {
 		
 	}
 
-	
 	method perder() {
 		game.clear()
 		
@@ -115,6 +105,15 @@ object nivelBloques {
 		game.schedule(3500, {game.clear()})
 		
 		game.addVisual(new Fondo(image = "Pantalla-GameOver.png" ))
+	}
+	
+	method verificaFinDeNivel() {
+		if (prota1.energia() <= 0 or prota1.salud() <= 0){
+			self.perder()
+		}
+		else if (forja.objetivoLogrado() and escalera.objetivoLogrado()) {
+			self.terminar()
+		}
 	}
 	
 	method terminar() {
