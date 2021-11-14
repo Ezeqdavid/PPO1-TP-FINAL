@@ -15,12 +15,12 @@ class PowerUp {
 
 class PocionMana inherits PowerUp{
     const property image = "flask_big_blue.png"
-	override method reaccionar(personaje) {super(personaje) personaje.energia(personaje.energia() + 6)}
+	override method reaccionar(personaje) {super(personaje) personaje.energia(personaje.energia() + 10)}
 }
 
 class VesselMana inherits PowerUp {
 	const property image = "flask_blue.png"
-	override method reaccionar(personaje) {super(personaje) personaje.energia(personaje.energia() + 2.5)}
+	override method reaccionar(personaje) {super(personaje) personaje.energia(personaje.energia() + 5)}
 }
 
 class PocionSalud inherits PowerUp {
@@ -117,7 +117,7 @@ class IndicadorSalud inherits Indicador {
 	override method reaccionar(personaje){}
 
 	override method visualizar(personaje) {
-		if (personaje.salud() <= 15) {
+		if (personaje.salud() <= 50) {
 			image = "ui_heart_half.png" 
 		} else {
 			image = "ui_heart_full.png"
@@ -131,8 +131,7 @@ class IndicadorEnergia inherits Indicador {
 	override method reaccionar(personaje){}
 
 	override method visualizar(personaje) {
-		if (personaje.energia() <= 15) {
-
+		if (personaje.energia() <= 50) {
 			image = "Energia_half.png"
 		} else {
 			image = "Energia_full.png"

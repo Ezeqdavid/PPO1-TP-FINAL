@@ -5,7 +5,7 @@ import utilidades.*
 import elementos.*
 
 object nivelLlaves {
-
+    //se crea el prota
 	const personajeSimple = new Protagonista()
 	
 	const energiaIndicador = new IndicadorEnergia(position = game.at(1,0))
@@ -14,7 +14,7 @@ object nivelLlaves {
 		// fondo - es importante que sea el primer visual que se agregue
 		game.addVisual(new Fondo(image = "fondoCompleto.png"))
 		
-		//cofres
+		//se crean los cofres
 		game.addVisual(new Cofre(position = utilidadesParaJuego.posicionArbitraria()))
 		game.addVisual(new Cofre(position = utilidadesParaJuego.posicionArbitraria()))
 		game.addVisual(new Cofre(position = utilidadesParaJuego.posicionArbitraria()))
@@ -22,31 +22,38 @@ object nivelLlaves {
 		game.addVisual(new Cofre(position = utilidadesParaJuego.posicionArbitraria()))
 		game.addVisual(new Cofre(position = utilidadesParaJuego.posicionArbitraria()))
 		
-		//celdasSorpresa
+
+		//se crean las celdas
 		game.addVisual(new CeldaQuitaEnergia(position = utilidadesParaJuego.posicionArbitraria()))
 		game.addVisual(new CeldaAgregaEnergia(position = utilidadesParaJuego.posicionArbitraria()))
 		game.addVisual(new CeldaTeletransportadora(position = utilidadesParaJuego.posicionArbitraria()))
 		
-		//powerUps
+
+		//se crean las pociones
 		game.addVisual(new VesselMana(position = utilidadesParaJuego.posicionArbitraria()))
 		game.addVisual(new PocionMana(position = utilidadesParaJuego.posicionArbitraria()))
 		game.addVisual(new PocionMana(position = utilidadesParaJuego.posicionArbitraria()))
+
+		//se crean las monedas
+		game.addVisual(new Monedas(position = utilidadesParaJuego.posicionArbitraria())) 
+		game.addVisual(new Monedas(position = utilidadesParaJuego.posicionArbitraria())) 
+		game.addVisual(new Monedas(position = utilidadesParaJuego.posicionArbitraria())) 
 		
-		//coleccionables
-		game.addVisual(new Monedas(position = utilidadesParaJuego.posicionArbitraria())) 
-		game.addVisual(new Monedas(position = utilidadesParaJuego.posicionArbitraria())) 
-		game.addVisual(new Monedas(position = utilidadesParaJuego.posicionArbitraria())) 
+		//se crean las monedas Sanguinarias
 		game.addVisual(new MonedaSanguinaria(position = utilidadesParaJuego.posicionArbitraria()))
 		game.addVisual(new MonedaSanguinaria(position = utilidadesParaJuego.posicionArbitraria()))
 		game.addVisual(new MonedaSanguinaria(position = utilidadesParaJuego.posicionArbitraria()))
 		game.addVisual(new MonedaSanguinaria(position = utilidadesParaJuego.posicionArbitraria()))
+
 	
 		//indicadores
 		game.addVisual(energiaIndicador)
 		game.addVisual(new IndicadorSalud(position = game.at(0,0)))
 		
-		// personaje, es importante que sea el último visual que se agregue
+        //se agrega el prota 
 		game.addVisual(personajeSimple)
+		
+		
 		// teclado
 		keyboard.i().onPressDo({game.allVisuals().forEach({o => game.say(o, o.toString())})})
 		
@@ -67,10 +74,11 @@ object nivelLlaves {
 			personajeSimple.gastarEnergia()
 		})
 			
-	// este es para probar, no es necesario dejarlo
+
 		keyboard.g().onPressDo({ self.ganar()})
-	// colisiones, acá sí hacen falta
-	game.onCollideDo(personajeSimple, {o => personajeSimple.accionar(o)})
+		
+		//coliciones.
+	    game.onCollideDo(personajeSimple, {o => personajeSimple.accionar(o)})
 	}
 	
 	method aparecerSalida() {
@@ -84,7 +92,6 @@ object nivelLlaves {
 			   !game.allVisuals().any({v => v == new MonedaSanguinaria(position = utilidadesParaJuego.posicionArbitraria())}) and
 			   personajeSimple.energia() > 0
 	}
-	
 	
 	method verificaFinDeNivel() {
 		if (personajeSimple.energia() <= 0 or personajeSimple.salud() <= 0) {
