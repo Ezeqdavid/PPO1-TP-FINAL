@@ -6,15 +6,18 @@ import nivel2.*
 import utilidades.*
 
 object nivelBloques {
-
+    //se crea el prota
 	const prota1 = new Protagonista()
-
-
-	const fragmento1 = new FragmentoEspada(position = utilidadesParaJuego.posicionArbitraria(), image = "Fragment_2_golden_sword.png")
+    // se crean los fragmentos
+	const fragmento1 = new FragmentoEspada(position = utilidadesParaJuego.posicionArbitraria(), image = "Fragment_1_golden_sword.png")
 	const fragmento2 = new FragmentoEspada(position = utilidadesParaJuego.posicionArbitraria(), image = "Fragment_2_golden_sword.png")
 	const fragmento3 = new FragmentoEspada(position = utilidadesParaJuego.posicionArbitraria(), image ="Broken_golden_sword.png" )
 	const fragmento4 = new FragmentoEspada(position = utilidadesParaJuego.posicionArbitraria(), image = "Gem_golden_sword.png")
+	
+	//se crean los indicadores
 	const energiaIndicador = new IndicadorEnergia(position = game.at(1,0))
+	const salud = new IndicadorSalud(position = game.at(0,0))
+	
 
 	method configurate() {
 	
@@ -56,7 +59,7 @@ object nivelBloques {
 		
 		//indicadores
 		game.addVisual(energiaIndicador)
-		game.addVisual(new IndicadorSalud(position = game.at(0,0)))
+		game.addVisual(salud)
 
 		
 		//prota
@@ -72,6 +75,12 @@ object nivelBloques {
 			//teclado
 			// este es para probar, no es necesario dejarlo
 		keyboard.t().onPressDo({ self.terminar()})
+		
+		keyboard.i().onPressDo({game.allVisuals().forEach({o => game.say(o, o.toString())})})
+
+		keyboard.space().onPressDo({game.say(prota1, prota1.informarEstado())})
+
+		keyboard.x().onPressDo({prota1.interactuar()})
 
 
 			
