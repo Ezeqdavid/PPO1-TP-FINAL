@@ -8,6 +8,7 @@ import utilidades.*
 object nivelBloques {
     //se crea el prota
 	const prota1 = new Protagonista()
+
     // se crean los fragmentos
 	const fragmento1 = new FragmentoEspada(position = utilidadesParaJuego.posicionArbitraria(), image = "Fragment_1_golden_sword.png")
 	const fragmento2 = new FragmentoEspada(position = utilidadesParaJuego.posicionArbitraria(), image = "Fragment_2_golden_sword.png")
@@ -17,22 +18,19 @@ object nivelBloques {
 	//se crean los indicadores
 	const energiaIndicador = new IndicadorEnergia(position = game.at(1,0))
 	const salud = new IndicadorSalud(position = game.at(0,0))
-	
 
 	method configurate() {
-	
+		
 		// fondo - es importante que sea el primer visual que se agregue
 		game.addVisual(new Fondo(image = "fondoCompleto.png"))
 		
-
 		//forja
 		game.addVisual(forja)
 		
-		//celdas	
+		//celdas
 		game.addVisual(new CeldaQuitaEnergia(position = utilidadesParaJuego.posicionArbitraria()))
 		game.addVisual(new CeldaAgregaEnergia(position = utilidadesParaJuego.posicionArbitraria()))
 		game.addVisual(new CeldaTeletransportadora(position = utilidadesParaJuego.posicionArbitraria()))
-		
 		
 		//pociones
 		game.addVisual(new VesselMana(position = utilidadesParaJuego.posicionArbitraria()))
@@ -42,14 +40,12 @@ object nivelBloques {
 		//moneda
 		game.addVisual(new Monedas(position = utilidadesParaJuego.posicionArbitraria())) 
 		
-
-		
 		//escalera y cofres
 		game.addVisual(escalera)
+		game.addVisual(new Cofre(position = utilidadesParaJuego.posicionArbitrariaParaCofres()))
+		game.addVisual(new Cofre(position = utilidadesParaJuego.posicionArbitrariaParaCofres()))
+		game.addVisual(new Cofre(position = utilidadesParaJuego.posicionArbitrariaParaCofres()))
 		
-	    game.addVisual(new Cofre(position = utilidadesParaJuego.posicionArbitrariaParaCofres()))
-		game.addVisual(new Cofre(position = utilidadesParaJuego.posicionArbitrariaParaCofres()))
-		game.addVisual(new Cofre(position = utilidadesParaJuego.posicionArbitrariaParaCofres()))
 		
 		// fragmentos de espada
 		game.addVisual(fragmento1)
@@ -57,51 +53,48 @@ object nivelBloques {
 		game.addVisual(fragmento3)
 		game.addVisual(fragmento4)
 		
+		
 		//indicadores
 		game.addVisual(energiaIndicador)
 		game.addVisual(salud)
-
-		
+			
 		//prota
 		game.addVisual(prota1)
-			
-				
-		game.whenCollideDo(prota1, {e => prota1.accionar(e)})
-
-		//game.onCollideDo(prota1, {o => prota1.accionar(o)})
 		
+		game.onCollideDo(prota1, {o => prota1.accionar(o)})
 		game.onCollideDo(escalera, {cofre => escalera.reaccionar(cofre)})
-
-			//teclado
-			// este es para probar, no es necesario dejarlo
+		
+		// teclado
+		// este es para probar, no es necesario dejarlo
 		keyboard.t().onPressDo({ self.terminar()})
+
 		
 		keyboard.i().onPressDo({game.allVisuals().forEach({o => game.say(o, o.toString())})})
 
 		keyboard.space().onPressDo({game.say(prota1, prota1.informarEstado())})
 
 		keyboard.x().onPressDo({prota1.interactuar()})
-
-
 			
 		// teclado movimiento:
+		keyboard.i().onPressDo({game.allVisuals().forEach({o => game.say(o, o.toString())})})
+		
+		keyboard.space().onPressDo({game.say(prota1, prota1.informarEstado())})
+		
+		keyboard.x().onPressDo({prota1.interactuar()})
+			
 		keyboard.up().onPressDo({ prota1.moverArriba()
 			prota1.gastarEnergia()
-			energiaIndicador.visualizar(prota1)
 		})
 		keyboard.down().onPressDo({ prota1.moverAbajo()
 			prota1.gastarEnergia()
-			energiaIndicador.visualizar(prota1)
 		})
 		keyboard.right().onPressDo({ prota1.moverDerecha()
 			prota1.gastarEnergia()
-			energiaIndicador.visualizar(prota1)
 		})
 		keyboard.left().onPressDo({ prota1.moverIzquierda()
 			prota1.gastarEnergia()
-			energiaIndicador.visualizar(prota1)
 		})
-		
+
 	}
 
 	method perder() {

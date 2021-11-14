@@ -3,6 +3,7 @@ import personajes.*
 import utilidades.*
 import personajes.*
 import nivel1.*
+import nivel2.*
 /* 
 class Bloque {
 	var property position
@@ -14,7 +15,6 @@ class Bloque {
 
 class PowerUp {
 	var property position 
-
 	//const cantEner = 30
 	//const cantSalud = 30 para que hacer una constatnte que no va a cambiar y luego hacer una cuenta, cuando podes sumarle el numero directamente.
 	method reaccionar(personaje) {
@@ -48,10 +48,14 @@ class Monedas inherits PowerUp {
 	override method reaccionar(personaje) {super(personaje) personaje.dinero(personaje.dinero() + 5)}
 }
 
+class MonedaSanguinaria inherits PowerUp {
+	const property image = "monedaSanguinaria.png"
+	override method reaccionar(personaje) {super(personaje) personaje.dinero(personaje.dinero() + 5) personaje.salud(personaje.salud() - 5)}
+}
+
 class Cofre {
 	const property image = "chest_empty_open_anim_f0.png"
 	var property position 
-
 	
 	method esMovible() {return true}
 
@@ -69,9 +73,8 @@ class Cofre {
 }
 
 class FragmentoEspada {
-	const property image 
-	const property position 
-	
+	const property image = "Broken_golden_sword.png"
+	var property position 
 	method reaccionar(personaje) {
 		personaje.recogerFragmento(self)
 		game.removeVisual(self)
@@ -82,7 +85,6 @@ class FragmentoEspada {
 class CeldaSorpresa {
 	const property image = "celdaSorpresa.png"
 	var property position
-
 	method reaccionar(personaje) {game.removeVisual(self)}
 	method esMovible() {return true} 
 }
@@ -110,15 +112,12 @@ class CeldaTeletransportadora inherits CeldaSorpresa {
 
 class Indicador {
 	const property position
-	
 	method reaccionar(personaje)
 	method visualizar(personaje)
 }
 
 class IndicadorSalud inherits Indicador {
 	var property image = "ui_heart_full.png"
-
-
 	override method reaccionar(personaje){}
 
 	override method visualizar(personaje) {
@@ -154,10 +153,9 @@ class IndicadorEnergia inherits Indicador {
 */
 object forja {
 	const property image = "wall_fountain_basin_red_anim_f0.png"
-	const property position = utilidadesParaJuego.posicionArbitraria()
+	const property position = game.at(9,0)
 	var property fragmentos = []
 	var property objetivoLogrado = false
-	
 	method esMovible() {return false}	
 	method reaccionar(personaje) {
 		fragmentos.addAll(personaje.fragmentos())
@@ -186,5 +184,14 @@ object escalera {
 			self.objetivoLogrado(true)
 		}
 		nivelBloques.verificaFinDeNivel()
+	}
+}
+
+object escaleraSalida {
+	const property image = "Escalera.png"
+	const property position = utilidadesParaJuego.posicionArbitraria()
+	
+	method reaccionar(personaje) {
+		nivelLlaves.verificaFinDeNivel()
 	}
 }
