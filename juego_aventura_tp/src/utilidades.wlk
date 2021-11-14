@@ -8,7 +8,7 @@ object utilidadesParaJuego {
 	}
 	
 	method posicionArbitrariaParaCofres() {
-		return game.at(1.randomUpTo(game.width().truncate(0) - 1), 1.randomUpTo(game.height().truncate(0) - 1))
+		return game.at(1.randomUpTo(game.width().truncate(0) - 1), 2.randomUpTo(game.height().truncate(0) - 1))
 	}
 }
 

@@ -7,6 +7,8 @@ import elementos.*
 object nivelLlaves {
     //se crea el prota
 	const personajeSimple = new Protagonista()
+	
+	const energiaIndicador = new IndicadorEnergia(position = game.at(1,0))
 
 	method configurate() {
 		// fondo - es importante que sea el primer visual que se agregue
@@ -20,16 +22,18 @@ object nivelLlaves {
 		game.addVisual(new Cofre(position = utilidadesParaJuego.posicionArbitraria()))
 		game.addVisual(new Cofre(position = utilidadesParaJuego.posicionArbitraria()))
 		
+
 		//se crean las celdas
 		game.addVisual(new CeldaQuitaEnergia(position = utilidadesParaJuego.posicionArbitraria()))
 		game.addVisual(new CeldaAgregaEnergia(position = utilidadesParaJuego.posicionArbitraria()))
 		game.addVisual(new CeldaTeletransportadora(position = utilidadesParaJuego.posicionArbitraria()))
 		
+
 		//se crean las pociones
 		game.addVisual(new VesselMana(position = utilidadesParaJuego.posicionArbitraria()))
 		game.addVisual(new PocionMana(position = utilidadesParaJuego.posicionArbitraria()))
 		game.addVisual(new PocionMana(position = utilidadesParaJuego.posicionArbitraria()))
-		
+
 		//se crean las monedas
 		game.addVisual(new Monedas(position = utilidadesParaJuego.posicionArbitraria())) 
 		game.addVisual(new Monedas(position = utilidadesParaJuego.posicionArbitraria())) 
@@ -40,9 +44,11 @@ object nivelLlaves {
 		game.addVisual(new MonedaSanguinaria(position = utilidadesParaJuego.posicionArbitraria()))
 		game.addVisual(new MonedaSanguinaria(position = utilidadesParaJuego.posicionArbitraria()))
 		game.addVisual(new MonedaSanguinaria(position = utilidadesParaJuego.posicionArbitraria()))
-		
-		//se agrega lasalida
-		game.addVisual(escaleraSalida)
+
+	
+		//indicadores
+		game.addVisual(energiaIndicador)
+		game.addVisual(new IndicadorSalud(position = game.at(0,0)))
 		
         //se agrega el prota 
 		game.addVisual(personajeSimple)
@@ -75,6 +81,17 @@ object nivelLlaves {
 	    game.onCollideDo(personajeSimple, {o => personajeSimple.accionar(o)})
 	}
 	
+	method aparecerSalida() {
+		if (self.condicionDeNivel()) {
+			game.addVisual(escaleraSalida)	
+		}
+	}
+	
+	method condicionDeNivel() {
+		return !game.allVisuals().any({v => v == new Monedas(position = utilidadesParaJuego.posicionArbitraria())}) and 
+			   !game.allVisuals().any({v => v == new MonedaSanguinaria(position = utilidadesParaJuego.posicionArbitraria())}) and
+			   personajeSimple.energia() > 0
+	}
 	
 	method verificaFinDeNivel() {
 		if (personajeSimple.energia() <= 0 or personajeSimple.salud() <= 0) {
