@@ -4,19 +4,9 @@ import utilidades.*
 import personajes.*
 import nivel1.*
 import nivel2.*
-/* 
-class Bloque {
-	var property position
-	const property image = "market.png" 	
-	
-	// agregar comportamiento	
-}
-*/
 
 class PowerUp {
 	var property position 
-	//const cantEner = 30
-	//const cantSalud = 30 para que hacer una constatnte que no va a cambiar y luego hacer una cuenta, cuando podes sumarle el numero directamente.
 	method reaccionar(personaje) {
 		game.removeVisual(self)
 	}
@@ -45,12 +35,17 @@ class VesselSalud inherits PowerUp {
 
 class Monedas inherits PowerUp {
 	const property image = "coin_anim_f0.png"
-	override method reaccionar(personaje) {super(personaje) personaje.dinero(personaje.dinero() + 5)}
+	override method reaccionar(personaje) {super(personaje) personaje.dinero(personaje.dinero() + 5) nivelLlaves.aparecerSalida()}
 }
 
 class MonedaSanguinaria inherits PowerUp {
 	const property image = "monedaSanguinaria.png"
-	override method reaccionar(personaje) {super(personaje) personaje.dinero(personaje.dinero() + 5) personaje.salud(personaje.salud() - 5)}
+	override method reaccionar(personaje) {
+		super(personaje) 
+		personaje.dinero(personaje.dinero() + 5) 
+		personaje.salud(personaje.salud() - 5)
+		nivelLlaves.aparecerSalida()
+	}
 }
 
 class Cofre {
@@ -114,6 +109,7 @@ class Indicador {
 	const property position
 	method reaccionar(personaje)
 	method visualizar(personaje)
+	method esMovible() = false
 }
 
 class IndicadorSalud inherits Indicador {
@@ -154,7 +150,7 @@ class IndicadorEnergia inherits Indicador {
 */
 object forja {
 	const property image = "wall_fountain_basin_red_anim_f0.png"
-	const property position = game.at(9,0)
+	const property position = game.at(13,1)
 	var property fragmentos = []
 	var property objetivoLogrado = false
 	method esMovible() {return false}	
@@ -162,7 +158,7 @@ object forja {
 		fragmentos.addAll(personaje.fragmentos())
 		personaje.dejarFragmentos()
 		game.say(self, "Juntaste " + fragmentos.size().stringValue() + " fragmentos, ya casi está todo.")
-		if (fragmentos.size() == 3) {
+		if (fragmentos.size() == 4) {
 			self.objetivoLogrado(true)
 		}
 		nivelBloques.verificaFinDeNivel()
@@ -171,7 +167,7 @@ object forja {
 
 object escalera {
 	const property image = "Escalera.png"
-	const property position = game.at(0,9)
+	const property position = game.at(0,13)
 	var property cofresPisoInferior = []
 	var property objetivoLogrado = false
 	
@@ -192,6 +188,7 @@ object escaleraSalida {
 	const property image = "Escalera.png"
 	const property position = utilidadesParaJuego.posicionArbitraria()
 	
+	method esMovible() = true
 	method reaccionar(personaje) {
 		nivelLlaves.verificaFinDeNivel()
 	}

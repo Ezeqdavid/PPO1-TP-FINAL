@@ -72,16 +72,16 @@ object nivelBloques {
 		keyboard.x().onPressDo({prota1.interactuar()})
 			
 		keyboard.up().onPressDo({ prota1.moverArriba()
-			prota1.gastarEnergia()
+			prota1.gastarEnergia() self.verificaFinDeNivel()
 		})
 		keyboard.down().onPressDo({ prota1.moverAbajo()
-			prota1.gastarEnergia()
+			prota1.gastarEnergia() self.verificaFinDeNivel()
 		})
 		keyboard.right().onPressDo({ prota1.moverDerecha()
-			prota1.gastarEnergia()
+			prota1.gastarEnergia() self.verificaFinDeNivel()
 		})
 		keyboard.left().onPressDo({ prota1.moverIzquierda()
-			prota1.gastarEnergia()
+			prota1.gastarEnergia() self.verificaFinDeNivel()
 		})
 
 	}

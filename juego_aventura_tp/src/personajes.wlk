@@ -8,17 +8,16 @@ import elementos.*
 // imagen y posición
 class Protagonista {
 
-	var property position = game.at(0, 0)
+	var property position = game.at(0, 1)
 	const property image = "knight_f_idle_anim_f0.png"
 	var property energia = 200
-	var property salud = 30
+	var property salud = 60
 	var property dinero = 0
 	var direccion = arriba
 	var property fragmentos = []
 
 	method gastarEnergia() {
 		energia -= 1
-		nivelBloques.verificaFinDeNivel()
 	}
 	
 	method moverDerecha() {
