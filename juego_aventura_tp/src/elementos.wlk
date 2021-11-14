@@ -66,7 +66,7 @@ class Cofre {
 }
 
 class FragmentoEspada {
-	const property image = "Broken_golden_sword.png"
+	const property image 
 	const property position 
 	method reaccionar(personaje) {
 		personaje.recogerFragmento(self)
@@ -103,34 +103,50 @@ class CeldaTeletransportadora inherits CeldaSorpresa {
 
 class Indicador {
 	const property position
+	
 	method reaccionar(personaje)
 	method visualizar(personaje)
 }
 
 class IndicadorSalud inherits Indicador {
-	var property imagen = "ui_heart_full.png"
+	var property image = "ui_heart_full.png"
+	
+	override method reaccionar(personaje){}
+	
 	override method visualizar(personaje) {
 		if (personaje.salud() < 15) {
-			self.imagen("ui_heart_half.png") 
+			image = "ui_heart_half.png" 
 		} else {
-			self.imagen("ui_heart_full.png")
+			image = "ui_heart_full.png"
 		}
 	}
 }
 
 class IndicadorEnergia inherits Indicador {
-	var property imagen = "ui_heart_full.png"
+	var property image = "Energia_full.png"
+	
+	override method reaccionar(personaje){}
+	
 	override method visualizar(personaje) {
 		if (personaje.energia() < 15) {
-			self.imagen("ui_heart_half.png") 
+			image = "Energia_half.png"
 		} else {
-			self.imagen("ui_heart_full.png")
+			image = "Energia_full.png"
 		}
 	}
 }
 
+/* object barraDeIndicadores{
+	var property position = game.at(0,0)
+	var property image = "barra_indicadores.png"
+	
+	method reaccionar(){}
+}
+*/
+
+
 class Forja {
-	const property imagen = "caja.png"
+	const property imagen = "wall_fountain_basin_red_anim_f0.png"
 	const property position
 	var fragmentos = []
 		
