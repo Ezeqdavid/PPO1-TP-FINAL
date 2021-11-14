@@ -118,32 +118,45 @@ class Indicador {
 
 class IndicadorSalud inherits Indicador {
 	var property image = "ui_heart_full.png"
+	override method reaccionar(personaje){}
+
 	override method visualizar(personaje) {
-		if (personaje.salud() < 15) {
-			self.image("ui_heart_half.png") 
+		if (personaje.salud() <= 15) {
+			image = "ui_heart_half.png" 
 		} else {
-			self.image("ui_heart_full.png")
+			image = "ui_heart_full.png"
 		}
 	}
 }
 
 class IndicadorEnergia inherits Indicador {
-	var property image = "ui_heart_full.png"
+	var property image = "Energia_full.png"
+	
+	override method reaccionar(personaje){}
+
 	override method visualizar(personaje) {
-		if (personaje.energia() < 15) {
-			self.image("ui_heart_half.png") 
+		if (personaje.energia() <= 15) {
+
+			image = "Energia_half.png"
 		} else {
-			self.image("ui_heart_full.png")
+			image = "Energia_full.png"
 		}
 	}
 }
 
+
+/* object barraDeIndicadores{
+	var property position = game.at(0,0)
+	var property image = "barra_indicadores.png"
+	
+	method reaccionar(){}
+}
+*/
 object forja {
 	const property image = "wall_fountain_basin_red_anim_f0.png"
 	const property position = game.at(9,0)
 	var property fragmentos = []
 	var property objetivoLogrado = false
-		
 	method esMovible() {return false}	
 	method reaccionar(personaje) {
 		fragmentos.addAll(personaje.fragmentos())
