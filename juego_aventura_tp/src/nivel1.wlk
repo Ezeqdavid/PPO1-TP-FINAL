@@ -9,50 +9,82 @@ object nivelBloques {
 
 	const prota1 = new Protagonista()
 	const cofre1 = new Cofre(position = game.at(2,3))
+
+
 	const fragmento1 = new FragmentoEspada(position = utilidadesParaJuego.posicionArbitraria(), image = "Fragment_2_golden_sword.png")
 	const fragmento2 = new FragmentoEspada(position = utilidadesParaJuego.posicionArbitraria(), image = "Fragment_2_golden_sword.png")
 	const fragmento3 = new FragmentoEspada(position = utilidadesParaJuego.posicionArbitraria(), image ="Broken_golden_sword.png" )
 	const fragmento4 = new FragmentoEspada(position = utilidadesParaJuego.posicionArbitraria(), image = "Gem_golden_sword.png")
 	const energiaIndicador = new IndicadorEnergia(position = game.at(1,0))
 
+	const escalera = new Escalera(position = utilidadesParaJuego.posicionArbitraria())
+	
+	const forja = new Forja(position = game.at(0.randomUpTo(game.width()), game.height() -2))
+
 
 	method configurate() {
-		
+	
 		// fondo - es importante que sea el primer visual que se agregue
 		game.addVisual(new Fondo(image = "fondoCompleto.png"))
 		
-			// otros visuals, p.ej. bloques o llaves
-			// personaje, es importante que sea el último visual que se agregue
-		//game.addVisual(new VesselMana(position = game.at(1,1)))
-		//game.addVisual(new VesselSalud(position = game.at(1,2)))
-		game.addVisual(new PocionMana(position = utilidadesParaJuego.posicionArbitraria(), image = "flask_big_blue.png"))
-		//game.addVisual(new Monedas(position = game.at(1,4))) 
-		//game.addVisual(new CeldaQuitaEnergia(position = utilidadesParaJuego.posicionArbitraria()))
+		//forja
+		game.addVisual(forja)
+		
+		//celdas	
+		game.addVisual(new CeldaQuitaEnergia(position = utilidadesParaJuego.posicionArbitraria()))
+		game.addVisual(new CeldaAgregaEnergia(position = utilidadesParaJuego.posicionArbitraria()))
+		game.addVisual(new CeldaTeletransportadora(position = utilidadesParaJuego.posicionArbitraria()))
+		
+		
+		//pociones
+		game.addVisual(new VesselMana(position = utilidadesParaJuego.posicionArbitraria()))
+		game.addVisual(new PocionMana(position = utilidadesParaJuego.posicionArbitraria()))
+		game.addVisual(new PocionMana(position = utilidadesParaJuego.posicionArbitraria()))
+		
+		//moneda
+		game.addVisual(new Monedas(position = utilidadesParaJuego.posicionArbitraria())) 
+		
+
+		
+		//escalera y cofre
+		game.addVisual(escalera)
 		game.addVisual(cofre1)
 		
-		//game.addVisual(new Forja(position = game.height() -2))
+		// fragmentos de espada
 		game.addVisual(fragmento1)
 		game.addVisual(fragmento2)
 		game.addVisual(fragmento3)
 		game.addVisual(fragmento4)
 		
+		//indicadores
 		game.addVisual(energiaIndicador)
 		game.addVisual(new IndicadorSalud(position = game.at(0,0)))
+
 		
+		//prota
 		game.addVisual(prota1)
 			
+				
+		game.whenCollideDo(prota1, {e => prota1.accionar(e)})
+
+		//game.onCollideDo(prota1, {o => prota1.accionar(o)})
+		
+		game.onCollideDo(escalera, {cofre => escalera.reaccionar(cofre)})
 			
-			// teclado
+	
+			//teclado
 			// este es para probar, no es necesario dejarlo
 		keyboard.t().onPressDo({ self.terminar()})
+
+		keyboard.i().onPressDo({game.allVisuals().forEach({o => game.say(o, o.toString())})})
 		
-		game.whenCollideDo(prota1, {e => prota1.accionar(e)})
-			
-		// teclado movimiento:
 		keyboard.space().onPressDo({game.say(prota1, prota1.informarEstado())})
 		
-		keyboard.r().onPressDo({prota1.recogerObjetosProximos()})
+		keyboard.x().onPressDo({prota1.interactuar()})
 			
+
+		// teclado movimiento:
+
 		keyboard.up().onPressDo({ prota1.moverArriba()
 			prota1.gastarEnergia()
 			energiaIndicador.visualizar(prota1)
@@ -69,7 +101,7 @@ object nivelBloques {
 			prota1.gastarEnergia()
 			energiaIndicador.visualizar(prota1)
 		})
-	// en este no hacen falta colisiones
+		
 	}
 
 	

@@ -13,44 +13,45 @@ class Bloque {
 */
 
 class PowerUp {
-	const property image 
 	const property position 
 	//const cantEner = 30
 	//const cantSalud = 30 para que hacer una constatnte que no va a cambiar y luego hacer una cuenta, cuando podes sumarle el numero directamente.
 	method reaccionar(personaje) {
 		game.removeVisual(self)
 	}
+	method esMovible() {return true}
 }
 
 class PocionMana inherits PowerUp{
-    //const image = "flask_big_blue.png"
+    const property image = "flask_big_blue.png"
 	override method reaccionar(personaje) {super(personaje) personaje.energia(personaje.energia() + 6)}
 }
 
 class VesselMana inherits PowerUp {
-	//const image = "flask_blue.png"
+	const property image = "flask_blue.png"
 	override method reaccionar(personaje) {super(personaje) personaje.energia(personaje.energia() + 2.5)}
 }
 
 class PocionSalud inherits PowerUp {
-	//const image = "flask_big_red.png"
+	const property image = "flask_big_red.png"
 	override method reaccionar(personaje) {super(personaje) personaje.salud(personaje.salud() + 15)}
 }
 
 class VesselSalud inherits PowerUp {
-	//const image = "flask_red.png"
+	const property image = "flask_red.png"
 	override method reaccionar(personaje) {super(personaje) personaje.salud(personaje.salud() + 5)}
 }
 
 class Monedas inherits PowerUp {
-	//const image = "coin_anim_f0.png"
+	const property image = "coin_anim_f0.png"
 	override method reaccionar(personaje) {super(personaje) personaje.dinero(personaje.dinero() + 5)}
 }
 
 class Cofre {
-
 	const property image = "chest_empty_open_anim_f0.png"
 	var property position = game.at(2, 3)
+	
+	method esMovible() {return true}
 
 	method reaccionar(personaje) {
 		const newPosition = personaje.direccion().siguiente(position)
@@ -72,12 +73,14 @@ class FragmentoEspada {
 		personaje.recogerFragmento(self)
 		game.removeVisual(self)
 	}
+	method esMovible() {return true}
 }
 
 class CeldaSorpresa {
-	const property image = "player.png"
+	const property image = "celdaSorpresa.png"
 	const property position
-	method reaccionar(personaje) {game.removeVisual(self)} 
+	method reaccionar(personaje) {game.removeVisual(self)}
+	method esMovible() {return true} 
 }
 
 class CeldaQuitaEnergia inherits CeldaSorpresa {
@@ -110,11 +113,11 @@ class Indicador {
 
 class IndicadorSalud inherits Indicador {
 	var property image = "ui_heart_full.png"
-	
+
 	override method reaccionar(personaje){}
-	
+
 	override method visualizar(personaje) {
-		if (personaje.salud() < 15) {
+		if (personaje.salud() <= 15) {
 			image = "ui_heart_half.png" 
 		} else {
 			image = "ui_heart_full.png"
@@ -126,9 +129,10 @@ class IndicadorEnergia inherits Indicador {
 	var property image = "Energia_full.png"
 	
 	override method reaccionar(personaje){}
-	
+
 	override method visualizar(personaje) {
-		if (personaje.energia() < 15) {
+		if (personaje.energia() <= 15) {
+
 			image = "Energia_half.png"
 		} else {
 			image = "Energia_full.png"
@@ -147,8 +151,11 @@ class IndicadorEnergia inherits Indicador {
 
 class Forja {
 	const property imagen = "wall_fountain_basin_red_anim_f0.png"
+	
 	const property position
-	var fragmentos = []
+	var property fragmentos = []
+		
+	method esMovible() {return false}
 		
 	method reaccionar(personaje) {
 		fragmentos.addAll(personaje.fragmentos())
@@ -157,5 +164,18 @@ class Forja {
 		} else {
 			game.say(self, "Animo, aun faltan mas fragmentos.")
 		}
+	}
+}
+
+class Escalera {
+	const property image = "Escalera.png"
+	const property position 
+	var property cofresPisoInferior = []
+	
+	method esMovible() {return false}
+	
+	method reaccionar(cofre) {
+		cofresPisoInferior.add(cofre)
+		game.removeVisual(cofre)
 	}
 }
