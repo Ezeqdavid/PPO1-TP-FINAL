@@ -49,7 +49,7 @@ class Protagonista {
 
 	method avanzar() {
 		const newPosition = direccion.siguiente(position)
-		if (newPosition.allElements().isEmpty() or newPosition.allElements().contains(new Cofre())) {
+		if (newPosition.allElements().all({e => e.esMovible()})) {
 			position = newPosition
 		}
 	}
@@ -85,7 +85,7 @@ class Protagonista {
 		fragmentos.add(fragmento)
 	}
 	
-	method recogerObjetosProximos() {
+	method interactuar() {
 		const objetos = []
 		objetos.addAll(game.getObjectsIn(position.left(1)))
 		objetos.addAll(game.getObjectsIn(position.right(1)))

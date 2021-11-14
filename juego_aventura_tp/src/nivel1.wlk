@@ -9,6 +9,7 @@ object nivelBloques {
 
 	const prota1 = new Protagonista()
 	const cofre1 = new Cofre(position = game.at(2,3))
+	const escalera = new Escalera(position = utilidadesParaJuego.posicionArbitraria())
 
 	method configurate() {
 		
@@ -17,28 +18,33 @@ object nivelBloques {
 		
 			// otros visuals, p.ej. bloques o llaves
 			// personaje, es importante que sea el último visual que se agregue
-		//game.addVisual(new VesselMana(position = game.at(1,1)))
-		//game.addVisual(new VesselSalud(position = game.at(1,2)))
-		game.addVisual(new PocionMana(position = utilidadesParaJuego.posicionArbitraria(), image = "flask_big_blue.png"))
-		//game.addVisual(new Monedas(position = game.at(1,4))) 
-		//game.addVisual(new CeldaQuitaEnergia(position = utilidadesParaJuego.posicionArbitraria()))
+		game.addVisual(new VesselMana(position = utilidadesParaJuego.posicionArbitraria()))
+		game.addVisual(new PocionMana(position = utilidadesParaJuego.posicionArbitraria()))
+		game.addVisual(new PocionMana(position = utilidadesParaJuego.posicionArbitraria()))
+		game.addVisual(new Monedas(position = utilidadesParaJuego.posicionArbitraria())) 
+		game.addVisual(new CeldaQuitaEnergia(position = utilidadesParaJuego.posicionArbitraria()))
+		game.addVisual(new FragmentoEspada(position = utilidadesParaJuego.posicionArbitraria()))
+		game.addVisual(new FragmentoEspada(position = utilidadesParaJuego.posicionArbitraria()))
+		game.addVisual(new FragmentoEspada(position = utilidadesParaJuego.posicionArbitraria()))
 		game.addVisual(cofre1)
+		game.addVisual(escalera)
+		game.addVisual(new Forja(position = utilidadesParaJuego.posicionArbitraria()))
+		
 		game.addVisual(prota1)
-		//game.addVisual(new Forja(position = utilidadesParaJuego.posicionArbitraria()))
-		game.addVisual(new FragmentoEspada(position = utilidadesParaJuego.posicionArbitraria()))
-		game.addVisual(new FragmentoEspada(position = utilidadesParaJuego.posicionArbitraria()))
-		game.addVisual(new FragmentoEspada(position = utilidadesParaJuego.posicionArbitraria()))
 			
 			
 			// teclado
 			// este es para probar, no es necesario dejarlo
 		keyboard.t().onPressDo({ self.terminar()})
-		game.whenCollideDo(cofre1, {p => p.accionar(cofre1)})
+		game.onCollideDo(prota1, {o => prota1.accionar(o)})
+		game.onCollideDo(escalera, {cofre => escalera.reaccionar(cofre)})
 			
 		// teclado movimiento:
+		keyboard.i().onPressDo({game.allVisuals().forEach({o => game.say(o, o.toString())})})
+		
 		keyboard.space().onPressDo({game.say(prota1, prota1.informarEstado())})
 		
-		keyboard.r().onPressDo({prota1.recogerObjetosProximos()})
+		keyboard.x().onPressDo({prota1.interactuar()})
 			
 		keyboard.up().onPressDo({ prota1.moverArriba()
 			prota1.gastarEnergia()
