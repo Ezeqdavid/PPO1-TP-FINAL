@@ -18,7 +18,6 @@ class Protagonista {
 
 	method gastarEnergia() {
 		energia -= 1
-		nivelBloques.verificaFinDeNivel()
 	}
 	
 	method moverDerecha() {

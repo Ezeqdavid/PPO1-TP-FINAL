@@ -83,21 +83,22 @@ object nivelBloques {
 		keyboard.x().onPressDo({prota1.interactuar()})
 			
 		keyboard.up().onPressDo({ prota1.moverArriba()
-			prota1.gastarEnergia()
+			prota1.gastarEnergia() self.verificaFinDeNivel() energiaIndicador.visualizar(prota1)
 		})
 		keyboard.down().onPressDo({ prota1.moverAbajo()
-			prota1.gastarEnergia()
+			prota1.gastarEnergia() self.verificaFinDeNivel() energiaIndicador.visualizar(prota1)
 		})
 		keyboard.right().onPressDo({ prota1.moverDerecha()
-			prota1.gastarEnergia()
+			prota1.gastarEnergia() self.verificaFinDeNivel() energiaIndicador.visualizar(prota1)
 		})
 		keyboard.left().onPressDo({ prota1.moverIzquierda()
-			prota1.gastarEnergia()
+			prota1.gastarEnergia() self.verificaFinDeNivel() energiaIndicador.visualizar(prota1)
 		})
 
 	}
 
 	method perder() {
+		
 		game.clear()
 		
 		game.addVisual(new Fondo(image = "fondoCompleto.png"))
@@ -107,7 +108,17 @@ object nivelBloques {
 		game.schedule(3500, {game.clear()})
 		
 		game.addVisual(new Fondo(image = "Pantalla-GameOver.png" ))
+		
+		
 	}
+	
+	/* 
+	method reiniciar(){
+		game.clear()
+		self.configurate()
+	}
+	* 
+	*/
 	
 	method verificaFinDeNivel() {
 		if (prota1.energia() <= 0 or prota1.salud() <= 0){

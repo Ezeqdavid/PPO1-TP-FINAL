@@ -4,19 +4,9 @@ import utilidades.*
 import personajes.*
 import nivel1.*
 import nivel2.*
-/* 
-class Bloque {
-	var property position
-	const property image = "market.png" 	
-	
-	// agregar comportamiento	
-}
-*/
 
 class PowerUp {
 	var property position 
-	//const cantEner = 30
-	//const cantSalud = 30 para que hacer una constatnte que no va a cambiar y luego hacer una cuenta, cuando podes sumarle el numero directamente.
 	method reaccionar(personaje) {
 		game.removeVisual(self)
 	}
@@ -25,32 +15,37 @@ class PowerUp {
 
 class PocionMana inherits PowerUp{
     const property image = "flask_big_blue.png"
-	override method reaccionar(personaje) {super(personaje) personaje.energia(personaje.energia() + 10)}
+	override method reaccionar(personaje) {super(personaje) personaje.energia(personaje.energia() + 20)}
 }
 
 class VesselMana inherits PowerUp {
 	const property image = "flask_blue.png"
-	override method reaccionar(personaje) {super(personaje) personaje.energia(personaje.energia() + 5)}
+	override method reaccionar(personaje) {super(personaje) personaje.energia(personaje.energia() + 10)}
 }
 
 class PocionSalud inherits PowerUp {
 	const property image = "flask_big_red.png"
-	override method reaccionar(personaje) {super(personaje) personaje.salud(personaje.salud() + 15)}
+	override method reaccionar(personaje) {super(personaje) personaje.salud(personaje.salud() + 20)}
 }
 
 class VesselSalud inherits PowerUp {
 	const property image = "flask_red.png"
-	override method reaccionar(personaje) {super(personaje) personaje.salud(personaje.salud() + 5)}
+	override method reaccionar(personaje) {super(personaje) personaje.salud(personaje.salud() + 10)}
 }
 
 class Monedas inherits PowerUp {
 	const property image = "coin_anim_f0.png"
-	override method reaccionar(personaje) {super(personaje) personaje.dinero(personaje.dinero() + 5)}
+	override method reaccionar(personaje) {super(personaje) personaje.dinero(personaje.dinero() + 5) nivelLlaves.aparecerSalida()}
 }
 
 class MonedaSanguinaria inherits PowerUp {
 	const property image = "monedaSanguinaria.png"
-	override method reaccionar(personaje) {super(personaje) personaje.dinero(personaje.dinero() + 5) personaje.salud(personaje.salud() - 5)}
+	override method reaccionar(personaje) {
+		super(personaje) 
+		personaje.dinero(personaje.dinero() + 5) 
+		personaje.salud(personaje.salud() - 5)
+		nivelLlaves.aparecerSalida()
+	}
 }
 
 class Cofre {
@@ -114,7 +109,9 @@ class Indicador {
 	const property position
 	method reaccionar(personaje)
 	method visualizar(personaje)
-	method esMovible() {return false}
+
+	method esMovible() = false
+
 }
 
 class IndicadorSalud inherits Indicador {
@@ -122,7 +119,7 @@ class IndicadorSalud inherits Indicador {
 	override method reaccionar(personaje){}
 
 	override method visualizar(personaje) {
-		if (personaje.salud() <= 50) {
+		if (personaje.salud() <= 15) {
 			image = "ui_heart_half.png" 
 		} else {
 			image = "ui_heart_full.png"
@@ -154,10 +151,12 @@ class IndicadorEnergia inherits Indicador {
 */
 object forja {
 	const property image = "wall_fountain_basin_red_anim_f0.png"
-	const property position = game.at(9,0)
+	const property position = game.at(13,1)
 	var property fragmentos = []
 	var property objetivoLogrado = false
+	
 	method esMovible() {return false}	
+	
 	method reaccionar(personaje) {
 		fragmentos.addAll(personaje.fragmentos())
 		personaje.dejarFragmentos()
@@ -171,7 +170,7 @@ object forja {
 
 object escalera {
 	const property image = "Escalera.png"
-	const property position = game.at(0,9)
+	const property position = game.at(0,13)
 	var property cofresPisoInferior = []
 	var property objetivoLogrado = false
 	
@@ -188,10 +187,11 @@ object escalera {
 	}
 }
 
-object escaleraSalida {
-	const property image = "Escalera.png"
+object puertaSalida {
+	const property image = "door_open.png"
 	const property position = utilidadesParaJuego.posicionArbitraria()
 	
+	method esMovible() = true
 	method reaccionar(personaje) {
 		nivelLlaves.verificaFinDeNivel()
 	}

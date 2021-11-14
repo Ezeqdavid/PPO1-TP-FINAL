@@ -5,44 +5,67 @@ import utilidades.*
 import elementos.*
 
 object nivelLlaves {
+	
     //se crea el prota
 	const personajeSimple = new Protagonista()
+	
+	//se crean los indicadores
+	const energia = new IndicadorEnergia(position = game.at(1,0))
+	const salud = new IndicadorSalud(position = game.at(0,0))
 
 	method configurate() {
 		// fondo - es importante que sea el primer visual que se agregue
 		game.addVisual(new Fondo(image = "fondoCompleto.png"))
 		
-		//se crean los cofres
+		//se crean y se agregan los cofres
+		/*
 		game.addVisual(new Cofre(position = utilidadesParaJuego.posicionArbitraria()))
 		game.addVisual(new Cofre(position = utilidadesParaJuego.posicionArbitraria()))
 		game.addVisual(new Cofre(position = utilidadesParaJuego.posicionArbitraria()))
 		game.addVisual(new Cofre(position = utilidadesParaJuego.posicionArbitraria()))
 		game.addVisual(new Cofre(position = utilidadesParaJuego.posicionArbitraria()))
 		game.addVisual(new Cofre(position = utilidadesParaJuego.posicionArbitraria()))
-		
-		//se crean las celdas
+		 */
+
+		//se crean y se agregan las celdas
 		game.addVisual(new CeldaQuitaEnergia(position = utilidadesParaJuego.posicionArbitraria()))
 		game.addVisual(new CeldaAgregaEnergia(position = utilidadesParaJuego.posicionArbitraria()))
 		game.addVisual(new CeldaTeletransportadora(position = utilidadesParaJuego.posicionArbitraria()))
 		
-		//se crean las pociones
+
+		//se crean y se agregan las pociones
 		game.addVisual(new VesselMana(position = utilidadesParaJuego.posicionArbitraria()))
 		game.addVisual(new PocionMana(position = utilidadesParaJuego.posicionArbitraria()))
 		game.addVisual(new PocionMana(position = utilidadesParaJuego.posicionArbitraria()))
 		
-		//se crean las monedas
-		game.addVisual(new Monedas(position = utilidadesParaJuego.posicionArbitraria())) 
-		game.addVisual(new Monedas(position = utilidadesParaJuego.posicionArbitraria())) 
-		game.addVisual(new Monedas(position = utilidadesParaJuego.posicionArbitraria())) 
+		//salud
+		game.addVisual(new PocionSalud(position = utilidadesParaJuego.posicionArbitraria()))
+		game.addVisual(new PocionSalud(position = utilidadesParaJuego.posicionArbitraria()))
+		game.addVisual(new VesselSalud(position = utilidadesParaJuego.posicionArbitraria()))
+		game.addVisual(new VesselSalud(position = utilidadesParaJuego.posicionArbitraria()))
 		
-		//se crean las monedas Sanguinarias
-		game.addVisual(new MonedaSanguinaria(position = utilidadesParaJuego.posicionArbitraria()))
-		game.addVisual(new MonedaSanguinaria(position = utilidadesParaJuego.posicionArbitraria()))
-		game.addVisual(new MonedaSanguinaria(position = utilidadesParaJuego.posicionArbitraria()))
-		game.addVisual(new MonedaSanguinaria(position = utilidadesParaJuego.posicionArbitraria()))
+
+		//se crean y se agregan las monedas 
+		game.addVisual(new Monedas(position = utilidadesParaJuego.posicionArbitraria())) 
+		game.addVisual(new Monedas(position = utilidadesParaJuego.posicionArbitraria())) 
+		game.addVisual(new Monedas(position = utilidadesParaJuego.posicionArbitraria())) 
+	
 		
-		//se agrega lasalida
-		game.addVisual(escaleraSalida)
+		//se crean y se agregan monedas Sanguinarias
+		game.addVisual(new MonedaSanguinaria(position = utilidadesParaJuego.posicionArbitraria()))
+		game.addVisual(new MonedaSanguinaria(position = utilidadesParaJuego.posicionArbitraria()))
+		game.addVisual(new MonedaSanguinaria(position = utilidadesParaJuego.posicionArbitraria()))
+		game.addVisual(new MonedaSanguinaria(position = utilidadesParaJuego.posicionArbitraria()))
+		game.addVisual(new MonedaSanguinaria(position = utilidadesParaJuego.posicionArbitraria()))
+		game.addVisual(new MonedaSanguinaria(position = utilidadesParaJuego.posicionArbitraria()))
+		game.addVisual(new MonedaSanguinaria(position = utilidadesParaJuego.posicionArbitraria()))
+		game.addVisual(new MonedaSanguinaria(position = utilidadesParaJuego.posicionArbitraria()))
+		game.addVisual(new MonedaSanguinaria(position = utilidadesParaJuego.posicionArbitraria()))
+
+	
+		// se agregan los indicadores
+		game.addVisual(energia)
+		game.addVisual(salud)
 		
         //se agrega el prota 
 		game.addVisual(personajeSimple)
@@ -56,36 +79,69 @@ object nivelLlaves {
 		keyboard.x().onPressDo({personajeSimple.interactuar()})
 			
 		keyboard.up().onPressDo({ personajeSimple.moverArriba()
-			personajeSimple.gastarEnergia()
+			personajeSimple.gastarEnergia() energia.visualizar(personajeSimple) salud.visualizar(personajeSimple) 
 		})
 		keyboard.down().onPressDo({ personajeSimple.moverAbajo()
-			personajeSimple.gastarEnergia()
+			personajeSimple.gastarEnergia() energia.visualizar(personajeSimple) salud.visualizar(personajeSimple) 
 		})
 		keyboard.right().onPressDo({ personajeSimple.moverDerecha()
-			personajeSimple.gastarEnergia()
+			personajeSimple.gastarEnergia() energia.visualizar(personajeSimple) salud.visualizar(personajeSimple) 
 		})
 		keyboard.left().onPressDo({ personajeSimple.moverIzquierda()
-			personajeSimple.gastarEnergia()
+			personajeSimple.gastarEnergia() energia.visualizar(personajeSimple) salud.visualizar(personajeSimple) 
 		})
 			
 
 		keyboard.g().onPressDo({ self.ganar()})
+		
+		keyboard.any().onPressDo({self.aparecerSalida() self.verificaFinDeNivel()})
 		
 		//coliciones.
 	    game.onCollideDo(personajeSimple, {o => personajeSimple.accionar(o)})
 	}
 	
 	
+	
+	method aparecerSalida() {
+		if (self.condicionDeNivel() and !game.hasVisual(puertaSalida)) {
+			game.addVisual(puertaSalida)	
+		}
+		else {}
+	}
+	
+	method condicionDeNivel() = personajeSimple.dinero() == 60 and personajeSimple.energia() > 0
+	
+	/* 
+	method condicionDeNivel() {
+		return !game.allVisuals().any({v => v == new Monedas(position = utilidadesParaJuego.posicionArbitraria())}) and 
+			   !game.allVisuals().any({v => v == new MonedaSanguinaria(position = utilidadesParaJuego.posicionArbitraria())}) and
+			   personajeSimple.energia() > 0
+	}
+	* 
+	*/
+	
 	method verificaFinDeNivel() {
 		if (personajeSimple.energia() <= 0 or personajeSimple.salud() <= 0) {
 			self.perder()
-		} else if (personajeSimple.position() == escaleraSalida.position()) {
+		} else if (personajeSimple.position() == puertaSalida.position()) {
 			self.ganar()
 		}
 	}
 	
 	method perder() {
 		game.clear()
+				
+		game.clear()
+		
+		game.addVisual(new Fondo(image = "fondoCompleto.png"))
+		
+		game.addVisual(personajeSimple)
+		
+		game.schedule(3500, {game.clear()})
+		
+		game.addVisual(new Fondo(image = "Pantalla_GameOver_nivel2.png" ))
+		
+		
 	}
 	
 	method ganar() {
