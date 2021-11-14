@@ -3,6 +3,7 @@ import personajes.*
 import utilidades.*
 import personajes.*
 import nivel1.*
+import nivel2.*
 /* 
 class Bloque {
 	var property position
@@ -45,6 +46,11 @@ class VesselSalud inherits PowerUp {
 class Monedas inherits PowerUp {
 	const property image = "coin_anim_f0.png"
 	override method reaccionar(personaje) {super(personaje) personaje.dinero(personaje.dinero() + 5)}
+}
+
+class MonedaSanguinaria inherits PowerUp {
+	const property image = "monedaSanguinaria.png"
+	override method reaccionar(personaje) {super(personaje) personaje.dinero(personaje.dinero() + 5) personaje.salud(personaje.salud() - 5)}
 }
 
 class Cofre {
@@ -166,5 +172,14 @@ object escalera {
 			self.objetivoLogrado(true)
 		}
 		nivelBloques.verificaFinDeNivel()
+	}
+}
+
+object escaleraSalida {
+	const property image = "Escalera.png"
+	const property position = utilidadesParaJuego.posicionArbitraria()
+	
+	method reaccionar(personaje) {
+		nivelLlaves.verificaFinDeNivel()
 	}
 }

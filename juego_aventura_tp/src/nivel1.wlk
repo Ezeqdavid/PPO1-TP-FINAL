@@ -15,7 +15,6 @@ object nivelBloques {
 		game.addVisual(new Fondo(image = "fondoCompleto.png"))
 		
 			// otros visuals, p.ej. bloques o llaves
-			// personaje, es importante que sea el último visual que se agregue
 		game.addVisual(new CeldaQuitaEnergia(position = utilidadesParaJuego.posicionArbitraria()))
 		game.addVisual(new CeldaAgregaEnergia(position = utilidadesParaJuego.posicionArbitraria()))
 		game.addVisual(new CeldaTeletransportadora(position = utilidadesParaJuego.posicionArbitraria()))
@@ -31,18 +30,14 @@ object nivelBloques {
 		game.addVisual(new FragmentoEspada(position = utilidadesParaJuego.posicionArbitraria()))
 		game.addVisual(new FragmentoEspada(position = utilidadesParaJuego.posicionArbitraria()))
 		game.addVisual(new FragmentoEspada(position = utilidadesParaJuego.posicionArbitraria()))
-		
-		
-		
-		
+				
+		// personaje, es importante que sea el último visual que se agregue
 		game.addVisual(prota1)
 			
 			
-			// teclado
-			// este es para probar, no es necesario dejarlo
+		// teclado
+		// este es para probar, no es necesario dejarlo
 		keyboard.t().onPressDo({ self.terminar()})
-		game.onCollideDo(prota1, {o => prota1.accionar(o)})
-		game.onCollideDo(escalera, {cofre => escalera.reaccionar(cofre)})
 			
 		// teclado movimiento:
 		keyboard.i().onPressDo({game.allVisuals().forEach({o => game.say(o, o.toString())})})
@@ -63,10 +58,12 @@ object nivelBloques {
 		keyboard.left().onPressDo({ prota1.moverIzquierda()
 			prota1.gastarEnergia()
 		})
+		
 	// en este no hacen falta colisiones
+	game.onCollideDo(prota1, {o => prota1.accionar(o)})
+	game.onCollideDo(escalera, {cofre => escalera.reaccionar(cofre)})
 	}
 
-	
 	method perder() {
 		game.clear()
 	}
