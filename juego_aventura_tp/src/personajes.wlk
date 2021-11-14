@@ -1,5 +1,7 @@
 import wollok.game.*
 import direcciones.*
+import nivel1.*
+import elementos.*
 
 // en la implementación real, conviene tener un personaje por nivel
 // los personajes probablemente tengan un comportamiendo más complejo que solamente
@@ -12,11 +14,19 @@ class Protagonista {
 	var property salud = 30
 	var property dinero = 0
 	var direccion = arriba
+	var property fragmentos = []
 
 	method gastarEnergia() {
 		energia -= 1
+		self.verificarContinuidad()
 	}
-
+	
+	method verificarContinuidad() {
+		if (energia <= 0 or salud <= 0) {
+			nivelBloques.perder()
+		}
+	}
+	
 	method moverDerecha() {
 		direccion = derecha
 		if (!(position.x() == game.width() - 1)) self.avanzar() else self.position(new Position(y = self.position().y(), x = 0))
@@ -38,7 +48,10 @@ class Protagonista {
 	}
 
 	method avanzar() {
-		position = direccion.siguiente(position)
+		const newPosition = direccion.siguiente(position)
+		if (newPosition.allElements().isEmpty() or newPosition.allElements().contains(new Cofre())) {
+			position = newPosition
+		}
 	}
 
 	method retroceder() {
@@ -61,6 +74,24 @@ class Protagonista {
 			self.salud(self.salud() - 15)
 		}
 	}
-
+	
+	method informarEstado() {
+		return "Energia : " + self.energia().stringValue() + " Salud es: " 
+				+ self.salud().stringValue() + " Dinero es: " + self.dinero().stringValue() 
+				+ " Fragmentos : " + self.fragmentos().size().stringValue()
+	}
+	
+	method recogerFragmento(fragmento) {
+		fragmentos.add(fragmento)
+	}
+	
+	method recogerObjetosProximos() {
+		const objetos = []
+		objetos.addAll(game.getObjectsIn(position.left(1)))
+		objetos.addAll(game.getObjectsIn(position.right(1)))
+		objetos.addAll(game.getObjectsIn(position.up(1)))
+		objetos.addAll(game.getObjectsIn(position.down(1)))
+		objetos.forEach({o => o.reaccionar(self)})
+	}
 }
 

@@ -6,6 +6,7 @@ class Fondo {
 	var property image
 
 	method reaccionar(personaje) {
+		
 	}
 
 }
