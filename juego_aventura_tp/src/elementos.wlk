@@ -77,7 +77,7 @@ class FragmentoEspada {
 }
 
 class CeldaSorpresa {
-	const property image = "player.png"
+	const property image = "celdaSorpresa.png"
 	const property position
 	method reaccionar(personaje) {game.removeVisual(self)}
 	method esMovible() {return true} 

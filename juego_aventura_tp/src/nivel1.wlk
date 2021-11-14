@@ -18,17 +18,21 @@ object nivelBloques {
 		
 			// otros visuals, p.ej. bloques o llaves
 			// personaje, es importante que sea el último visual que se agregue
+		game.addVisual(new CeldaQuitaEnergia(position = utilidadesParaJuego.posicionArbitraria()))
+		game.addVisual(new CeldaAgregaEnergia(position = utilidadesParaJuego.posicionArbitraria()))
+		game.addVisual(new CeldaTeletransportadora(position = utilidadesParaJuego.posicionArbitraria()))
 		game.addVisual(new VesselMana(position = utilidadesParaJuego.posicionArbitraria()))
 		game.addVisual(new PocionMana(position = utilidadesParaJuego.posicionArbitraria()))
 		game.addVisual(new PocionMana(position = utilidadesParaJuego.posicionArbitraria()))
 		game.addVisual(new Monedas(position = utilidadesParaJuego.posicionArbitraria())) 
-		game.addVisual(new CeldaQuitaEnergia(position = utilidadesParaJuego.posicionArbitraria()))
+		game.addVisual(new Forja(position = utilidadesParaJuego.posicionArbitraria()))
+		game.addVisual(escalera)
 		game.addVisual(new FragmentoEspada(position = utilidadesParaJuego.posicionArbitraria()))
 		game.addVisual(new FragmentoEspada(position = utilidadesParaJuego.posicionArbitraria()))
 		game.addVisual(new FragmentoEspada(position = utilidadesParaJuego.posicionArbitraria()))
 		game.addVisual(cofre1)
-		game.addVisual(escalera)
-		game.addVisual(new Forja(position = utilidadesParaJuego.posicionArbitraria()))
+		
+		
 		
 		game.addVisual(prota1)
 			
