@@ -8,8 +8,6 @@ import utilidades.*
 object nivelBloques {
 
 	const prota1 = new Protagonista()
-	const cofre1 = new Cofre(position = game.at(2,3))
-	const escalera = new Escalera(position = utilidadesParaJuego.posicionArbitraria())
 
 	method configurate() {
 		
@@ -21,16 +19,19 @@ object nivelBloques {
 		game.addVisual(new CeldaQuitaEnergia(position = utilidadesParaJuego.posicionArbitraria()))
 		game.addVisual(new CeldaAgregaEnergia(position = utilidadesParaJuego.posicionArbitraria()))
 		game.addVisual(new CeldaTeletransportadora(position = utilidadesParaJuego.posicionArbitraria()))
+		game.addVisual(new Cofre(position = utilidadesParaJuego.posicionArbitrariaParaCofres()))
+		game.addVisual(new Cofre(position = utilidadesParaJuego.posicionArbitrariaParaCofres()))
+		game.addVisual(new Cofre(position = utilidadesParaJuego.posicionArbitrariaParaCofres()))
 		game.addVisual(new VesselMana(position = utilidadesParaJuego.posicionArbitraria()))
 		game.addVisual(new PocionMana(position = utilidadesParaJuego.posicionArbitraria()))
 		game.addVisual(new PocionMana(position = utilidadesParaJuego.posicionArbitraria()))
 		game.addVisual(new Monedas(position = utilidadesParaJuego.posicionArbitraria())) 
-		game.addVisual(new Forja(position = utilidadesParaJuego.posicionArbitraria()))
+		game.addVisual(forja)
 		game.addVisual(escalera)
 		game.addVisual(new FragmentoEspada(position = utilidadesParaJuego.posicionArbitraria()))
 		game.addVisual(new FragmentoEspada(position = utilidadesParaJuego.posicionArbitraria()))
 		game.addVisual(new FragmentoEspada(position = utilidadesParaJuego.posicionArbitraria()))
-		game.addVisual(cofre1)
+		
 		
 		
 		
@@ -68,6 +69,15 @@ object nivelBloques {
 	
 	method perder() {
 		game.clear()
+	}
+	
+	method verificaFinDeNivel() {
+		if (prota1.energia() <= 0 or prota1.salud() <= 0){
+			self.perder()
+		}
+		else if (forja.objetivoLogrado() and escalera.objetivoLogrado()) {
+			self.terminar()
+		}
 	}
 	
 	method terminar() {

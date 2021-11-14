@@ -13,7 +13,7 @@ class Bloque {
 */
 
 class PowerUp {
-	const property position 
+	var property position 
 	//const cantEner = 30
 	//const cantSalud = 30 para que hacer una constatnte que no va a cambiar y luego hacer una cuenta, cuando podes sumarle el numero directamente.
 	method reaccionar(personaje) {
@@ -49,7 +49,7 @@ class Monedas inherits PowerUp {
 
 class Cofre {
 	const property image = "chest_empty_open_anim_f0.png"
-	var property position = game.at(2, 3)
+	var property position 
 	
 	method esMovible() {return true}
 
@@ -68,7 +68,7 @@ class Cofre {
 
 class FragmentoEspada {
 	const property image = "Broken_golden_sword.png"
-	const property position 
+	var property position 
 	method reaccionar(personaje) {
 		personaje.recogerFragmento(self)
 		game.removeVisual(self)
@@ -78,7 +78,7 @@ class FragmentoEspada {
 
 class CeldaSorpresa {
 	const property image = "celdaSorpresa.png"
-	const property position
+	var property position
 	method reaccionar(personaje) {game.removeVisual(self)}
 	method esMovible() {return true} 
 }
@@ -132,31 +132,39 @@ class IndicadorEnergia inherits Indicador {
 	}
 }
 
-class Forja {
+object forja {
 	const property image = "wall_fountain_basin_red_anim_f0.png"
-	const property position
+	const property position = game.at(9,0)
 	var property fragmentos = []
+	var property objetivoLogrado = false
 		
 	method esMovible() {return false}	
 	method reaccionar(personaje) {
 		fragmentos.addAll(personaje.fragmentos())
+		personaje.dejarFragmentos()
+		game.say(self, "Juntaste " + fragmentos.size().stringValue() + " fragmentos, ya casi está todo.")
 		if (fragmentos.size() == 3) {
-			nivelBloques.terminar()
-		} else {
-			game.say(self, "Animo, aun faltan mas fragmentos.")
+			self.objetivoLogrado(true)
 		}
+		nivelBloques.verificaFinDeNivel()
 	}
 }
 
-class Escalera {
+object escalera {
 	const property image = "Escalera.png"
-	const property position 
+	const property position = game.at(0,9)
 	var property cofresPisoInferior = []
+	var property objetivoLogrado = false
 	
 	method esMovible() {return false}
 	
 	method reaccionar(cofre) {
 		cofresPisoInferior.add(cofre)
 		game.removeVisual(cofre)
+		game.say(self, "Bajaste " + cofresPisoInferior.size().stringValue() + " cofres, dale que falta poco.")
+		if (cofresPisoInferior.size() == 3) {
+			self.objetivoLogrado(true)
+		}
+		nivelBloques.verificaFinDeNivel()
 	}
 }
