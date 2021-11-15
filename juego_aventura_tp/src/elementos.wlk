@@ -8,6 +8,8 @@ import nivel2.*
 class PowerUp {
 	var property position 
 	method reaccionar(personaje) {
+		const sound = new Sound(file = "powerUp.mp3")
+		sound.play()
 		game.removeVisual(self)
 	}
 	method esMovible() {return true}
@@ -35,7 +37,7 @@ class VesselSalud inherits PowerUp {
 
 class Monedas inherits PowerUp {
 	const property image = "coin_anim_f0.png"
-	override method reaccionar(personaje) {super(personaje) personaje.dinero(personaje.dinero() + 5) nivelLlaves.aparecerSalida()}
+	override method reaccionar(personaje) {super(personaje) personaje.dinero(personaje.dinero() + 5)}
 }
 
 class MonedaSanguinaria inherits PowerUp {
@@ -55,12 +57,15 @@ class MonedaSanguinaria inherits PowerUp {
 
 class Cofre {
 	const property image = "chest_empty_open_anim_f0.png"
+	
 	var property position 
 	
 	method esMovible() {return true}
 
 	method reaccionar(personaje) {
+		const sound = new Sound(file = "colisioncaja.mp3")
 		const newPosition = personaje.direccion().siguiente(position)
+		sound.play()
 		if (newPosition.y() != game.height() and 
 			newPosition.x() != game.width() and
 			newPosition.x() != -1 and 
@@ -163,6 +168,8 @@ object forja {
 	method esMovible() {return false}	
 	
 	method reaccionar(personaje) {
+		const sound = new Sound(file = "logro.mp3")
+		sound.play()
 		fragmentos.addAll(personaje.fragmentos())
 		personaje.dejarFragmentos()
 		game.say(self, "Juntaste " + fragmentos.size().stringValue() + " fragmentos, ya casi está todo.")
@@ -182,6 +189,8 @@ object escalera {
 	method esMovible() {return false}
 	
 	method reaccionar(cofre) {
+		const sound = new Sound(file = "logro.mp3")
+		sound.play()
 		cofresPisoInferior.add(cofre)
 		game.removeVisual(cofre)
 		game.say(self, "Bajaste " + cofresPisoInferior.size().stringValue() + " cofres, dale que falta poco.")

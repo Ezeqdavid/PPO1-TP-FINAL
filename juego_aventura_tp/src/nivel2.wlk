@@ -11,6 +11,8 @@ object nivelLlaves {
 	
 	var property monedasEnNivel = 0
 	
+	const property soundtrack = new Sound(file = "chopin_preludio4.mp3")
+	
 	//se crean los indicadores
 	const energia = new IndicadorEnergia(position = game.at(1,0))
 	const salud = new IndicadorSalud(position = game.at(0,0))
@@ -46,13 +48,6 @@ object nivelLlaves {
 		game.addVisual(new VesselSalud(position = utilidadesParaJuego.posicionArbitraria()))
 		game.addVisual(new VesselSalud(position = utilidadesParaJuego.posicionArbitraria()))
 		
-
-		//se crean y se agregan las monedas 
-		game.addVisual(new Monedas(position = utilidadesParaJuego.posicionArbitraria())) 
-		game.addVisual(new Monedas(position = utilidadesParaJuego.posicionArbitraria())) 
-		game.addVisual(new Monedas(position = utilidadesParaJuego.posicionArbitraria())) 
-	
-		
 		//se crean y se agregan monedas Sanguinarias
 		game.addVisual(new MonedaSanguinaria(position = utilidadesParaJuego.posicionArbitraria()))
 		game.addVisual(new MonedaSanguinaria(position = utilidadesParaJuego.posicionArbitraria()))
@@ -71,7 +66,6 @@ object nivelLlaves {
 		
         //se agrega el prota 
 		game.addVisual(personajeSimple)
-		
 		
 		// teclado
 		keyboard.i().onPressDo({game.allVisuals().forEach({o => game.say(o, o.toString())})})
@@ -96,13 +90,19 @@ object nivelLlaves {
 
 		keyboard.g().onPressDo({ self.ganar()})
 		
-		keyboard.any().onPressDo({self.aparecerSalida() self.verificaFinDeNivel()})
+		keyboard.any().onPressDo({self.reproducir()self.aparecerSalida() self.verificaFinDeNivel()})
 		
-		//coliciones.
+		//colisiones.
 	    game.onCollideDo(personajeSimple, {o => personajeSimple.accionar(o)})
 	}
 	
-	
+	method reproducir() {
+		if (!self.soundtrack().played()) {
+			self.soundtrack().shouldLoop(true)
+			self.soundtrack().volume(0.4)
+			self.soundtrack().play()
+		}
+	}
 	
 	method aparecerSalida() {
 		if (self.condicionDeNivel() and !game.hasVisual(puertaSalida)) {
@@ -133,7 +133,7 @@ object nivelLlaves {
 		
 		game.addVisual(new Fondo(image = "Pantalla_GameOver_nivel2.png" ))
 		
-		
+		soundtrack.stop()
 	}
 	
 	method ganar() {
@@ -141,6 +141,7 @@ object nivelLlaves {
 		// el perder() también va a ser parecido
 		// game.clear() limpia visuals, teclado, colisiones y acciones
 		game.clear()
+		soundtrack.stop()
 			// después puedo volver a agregar el fondo, y algún visual para que no quede tan pelado
 		game.addVisual(new Fondo(image = "fondoCompleto.png"))
 			// después de un ratito ...

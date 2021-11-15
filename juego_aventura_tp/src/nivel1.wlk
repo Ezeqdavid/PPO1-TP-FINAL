@@ -8,7 +8,9 @@ import utilidades.*
 object nivelBloques {
     //se crea el prota
 	const prota1 = new Protagonista()
-
+	
+	const property soundtrack = new Sound(file = "danzamacabra.mp3")
+	
     // se crean los fragmentos
 	const fragmento1 = new FragmentoEspada(position = utilidadesParaJuego.posicionArbitraria(), image = "Fragment_1_golden_sword.png")
 	const fragmento2 = new FragmentoEspada(position = utilidadesParaJuego.posicionArbitraria(), image = "Fragment_2_golden_sword.png")
@@ -78,6 +80,8 @@ object nivelBloques {
 		// teclado movimiento:
 		keyboard.i().onPressDo({game.allVisuals().forEach({o => game.say(o, o.toString())})})
 		
+		keyboard.p().onPressDo({self.configurate()})
+		
 		keyboard.space().onPressDo({game.say(prota1, prota1.informarEstado())})
 		
 		keyboard.x().onPressDo({prota1.interactuar()})
@@ -94,9 +98,19 @@ object nivelBloques {
 		keyboard.left().onPressDo({ prota1.moverIzquierda()
 			prota1.gastarEnergia() self.verificaFinDeNivel() energiaIndicador.visualizar(prota1)
 		})
+		
+		keyboard.any().onPressDo({self.reproducir()})
 
 	}
-
+	
+	method reproducir() {
+		if (!self.soundtrack().played()) {
+			self.soundtrack().shouldLoop(true)
+			self.soundtrack().volume(0.6)
+			self.soundtrack().play()
+		}
+	}
+	
 	method perder() {
 		
 		game.clear()
@@ -105,11 +119,9 @@ object nivelBloques {
 		
 		game.addVisual(prota1)
 		
-		game.schedule(3500, {game.clear()})
-		
 		game.addVisual(new Fondo(image = "Pantalla-GameOver.png" ))
 		
-		
+		soundtrack.stop()
 	}
 	
 	/* 
@@ -132,6 +144,7 @@ object nivelBloques {
 	method terminar() {
 		// game.clear() limpia visuals, teclado, colisiones y acciones
 		game.clear()
+		soundtrack.stop()
 			// después puedo volver a agregar el fondo, y algún visual para que no quede tan pelado
 		game.addVisual(new Fondo(image = "fondoCompleto.png"))
 		game.addVisual(prota1)
