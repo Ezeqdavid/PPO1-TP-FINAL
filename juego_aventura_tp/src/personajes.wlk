@@ -14,7 +14,7 @@ class Protagonista {
 	var property energia = 100
 	var property salud = 100
 	var property dinero = 0
-	var direccion = arriba
+	var property direccion = arriba
 	var property fragmentos = []
 
 	method gastarEnergia() {
@@ -74,14 +74,9 @@ class Protagonista {
 	
 	method direccion() = direccion
 
-	method recibirDanio(enemigo) {
-		if (enemigo == "Slime") {
-			self.salud(self.salud() - 5)
-		} else if (enemigo == "Goblin") {
-			self.salud(self.salud() - 10)
-		} else if (enemigo == "Orco") {
-			self.salud(self.salud() - 15)
-		}
+	method recibirDanio() {
+		self.retroceder()
+		self.salud(self.salud() - 20)
 	}
 	
 	method informarEstado() {

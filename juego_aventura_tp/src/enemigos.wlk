@@ -5,10 +5,9 @@ import personajes.*
 import nivel3.*
 
 class Enemigo {
-
 	var property position = utilidadesParaJuego.posicionArbitraria()
-	const property image
-	var  property salud = 100
+	var property salud
+	var property image
 
 	method movimiento(personaje) {
 		game.schedule(5000, { => self.acercarseA(personaje)})
@@ -23,37 +22,42 @@ class Enemigo {
 		position = game.at(newX, newY)
 	}
 
-	method daniar(personaje)
+
+method reaccionar(personaje)
+	
+method daniar(personaje)
+
 }
 
 class Diablito inherits Enemigo {
-
-	override method daniar(personaje) {
-		personaje.salud(personaje.salud() - 3) 
+	
+	method initialize() {
+		self.salud(20)
+	}
+	
+	override method reaccionar(personaje) {
+		personaje.recibirDanio()
 	}
 
 }
 
 class Goblin inherits Enemigo {
-
-	override method daniar(personaje) {
-		personaje.salud(personaje.salud() - 5)
+	
+	method initialize() {
+		self.salud(40)
+	}
+	override method reaccionar(personaje) {
+		personaje.recibirDanio()
 	}
 }
 
 class Orco inherits Enemigo {
-
-	override method daniar(personaje) {
-		personaje.salud(personaje.salud() - 10)
+	method initialize() {
+		self.salud(60)
+		self.image("ogre_idle_anim_f0.png")
 	}
-
-	override method acercarseA(personaje) {
-		const otroPosicion = personaje.position()
-		var newX = position.x() + if (otroPosicion.x() > position.x()) 2 else -2
-		var newY = position.y() + if (otroPosicion.y() > position.y()) 2 else -2
-		newX = newX.max(0).min(game.width() - 1)
-		newY = newY.max(0).min(game.height() - 1)
-		position = game.at(newX, newY)
+	override method reaccionar(personaje) {
+		personaje.recibirDanio()
 	}
 
 }

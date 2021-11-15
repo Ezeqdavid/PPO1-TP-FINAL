@@ -8,7 +8,9 @@ import nivel2.*
 import nivel3.*
 
 class PowerUp {
-	var property position 
+	var property position = utilidadesParaJuego.posicionArbitraria()
+	var property image = "flask_big_blue.png"
+	
 	method reaccionar(personaje) {
 		const sound = new Sound(file = "powerUp.mp3")
 		sound.play()
@@ -18,40 +20,50 @@ class PowerUp {
 }
 
 class PocionMana inherits PowerUp{
-    const property image = "flask_big_blue.png"
+	method initialize() {
+		self.image("flask_big_blue.png")
+	}
 	override method reaccionar(personaje) {super(personaje) personaje.energia(personaje.energia() + 20)}
 }
 
 class VesselMana inherits PowerUp {
-	const property image = "flask_blue.png"
+	
+	method initialize() {
+		self.image("flask_blue.png")
+	}
 	override method reaccionar(personaje) {super(personaje) personaje.energia(personaje.energia() + 10)}
 }
 
 class PocionSalud inherits PowerUp {
-	const property image = "flask_big_red.png"
+	
+	method initialize() {
+		self.image("flask_big_red.png")
+	}
 	override method reaccionar(personaje) {super(personaje) personaje.salud(personaje.salud() + 20)}
 }
 
 class VesselSalud inherits PowerUp {
-	const property image = "flask_red.png"
+	method initialize() {
+		self.image("flask_red.png")
+	}
 	override method reaccionar(personaje) {super(personaje) personaje.salud(personaje.salud() + 10)}
 }
 
 class Monedas inherits PowerUp {
-	const property image = "coin_anim_f0.png"
+	method initialize() {
+		self.image("coin_anim_f0.png")
+	}
 	override method reaccionar(personaje) {super(personaje) personaje.dinero(personaje.dinero() + 5)}
 }
 
-class MonedaSanguinaria inherits PowerUp {
-	const property image = "monedaSanguinaria.png"
-	
+class MonedaSanguinaria inherits Monedas {
 	method initialize() {
+		self.image("monedaSanguinaria.png")
 		nivelMonedas.monedasEnNivel(nivelMonedas.monedasEnNivel() + 1)
 	}
-	
+
 	override method reaccionar(personaje) {
 		super(personaje) 
-		personaje.dinero(personaje.dinero() + 5) 
 		personaje.salud(personaje.salud() - 5)
 		
 		nivelMonedas.monedasEnNivel(nivelMonedas.monedasEnNivel() - 1)
@@ -94,7 +106,7 @@ class FragmentoEspada {
 
 class CeldaSorpresa {
 	const property image = "celdaSorpresa.png"
-	var property position
+	var property position = utilidadesParaJuego.posicionArbitraria()
 	method reaccionar(personaje) {game.removeVisual(self)}
 	method esMovible() {return true} 
 }
@@ -121,8 +133,9 @@ class CeldaTeletransportadora inherits CeldaSorpresa {
 }
 
 class Indicador {
-	const property position
-	method reaccionar(personaje)
+	var property position
+	var property image = null
+	method reaccionar(personaje) {}
 	method visualizar(personaje)
 
 	method esMovible() = false
@@ -130,8 +143,10 @@ class Indicador {
 }
 
 class IndicadorSalud inherits Indicador {
-	var property image = "ui_heart_full.png"
-	override method reaccionar(personaje){}
+	method initialize() {
+		self.image("ui_heart_full.png")
+		self.position(game.at(0,0))
+	} 
 
 	override method visualizar(personaje) {
 		if (personaje.salud() <= 15) {
@@ -143,10 +158,11 @@ class IndicadorSalud inherits Indicador {
 }
 
 class IndicadorEnergia inherits Indicador {
-	var property image = "Energia_full.png"
+	method initialize() {
+		self.image("Energia_full.png")
+		self.position(game.at(1,0))
+	}
 	
-	override method reaccionar(personaje){}
-
 	override method visualizar(personaje) {
 		if (personaje.energia() <= 50) {
 			image = "Energia_half.png"

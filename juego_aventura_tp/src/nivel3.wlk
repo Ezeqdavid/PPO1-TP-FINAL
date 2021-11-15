@@ -12,49 +12,57 @@ object nivelConEnemigos {
 	const protaNivel3 = new Protagonista(salud = 200, image = "prota_nivel3.png")
 	 
 	//se crean los enemigos
+	const orco4 = new Orco()
+	const orco5 = new Orco()
+	const orco6 = new Orco()
+	
+	var property monedasEnNivel = 0
+	var property enemigos = 0
+  
 	const orco1 = new Orco(position = utilidadesParaJuego.posicionArbitraria(), image = "ogre_idle_anim_f0.png", salud = 200)
 	//const orco2 = new Orco(position = utilidadesParaJuego.posicionArbitraria(), image = "ogre_idle_anim_f0.png", salud=)
 	const goblin1 = new Goblin(position = utilidadesParaJuego.posicionArbitraria(), image = "goblin_idle_anim_f0.png", salud = 60 )
 	
 	var property enemigosEnNivel = []
+
 	
 	const property soundtrack = new Sound(file = "chopin_preludio4.mp3")
 	
 	//se crean los indicadores
-	const energia = new IndicadorEnergia(position = game.at(1,0))
-	const salud = new IndicadorSalud(position = game.at(0,0))
+	const energia = new IndicadorEnergia()
+	const salud = new IndicadorSalud()
 
 	method configurate() {
-		game.addVisual(new Fondo(image = "fondoCompleto.png"))
+		game.addVisual(new Fondo())
 		
 
 		//se crean y se agregan las celdas
-		game.addVisual(new CeldaQuitaEnergia(position = utilidadesParaJuego.posicionArbitraria()))
-		game.addVisual(new CeldaAgregaEnergia(position = utilidadesParaJuego.posicionArbitraria()))
-		game.addVisual(new CeldaTeletransportadora(position = utilidadesParaJuego.posicionArbitraria()))
+		game.addVisual(new CeldaQuitaEnergia())
+		game.addVisual(new CeldaAgregaEnergia())
+		game.addVisual(new CeldaTeletransportadora())
 		
 
 		//se crean y se agregan las pociones de mana 
-		game.addVisual(new VesselMana(position = utilidadesParaJuego.posicionArbitraria()))
-		game.addVisual(new PocionMana(position = utilidadesParaJuego.posicionArbitraria()))
-		game.addVisual(new PocionMana(position = utilidadesParaJuego.posicionArbitraria()))
+		game.addVisual(new VesselMana())
+		game.addVisual(new PocionMana())
+		game.addVisual(new PocionMana())
 		
 		//se crean y se agregan las pociones de salud
-		game.addVisual(new PocionSalud(position = utilidadesParaJuego.posicionArbitraria()))
-		game.addVisual(new PocionSalud(position = utilidadesParaJuego.posicionArbitraria()))
-		game.addVisual(new VesselSalud(position = utilidadesParaJuego.posicionArbitraria()))
-		game.addVisual(new VesselSalud(position = utilidadesParaJuego.posicionArbitraria()))
+		game.addVisual(new PocionSalud())
+		game.addVisual(new PocionSalud())
+		game.addVisual(new VesselSalud())
+		game.addVisual(new VesselSalud())
 		
 		//se crean y se agregan monedas Sanguinarias
-		game.addVisual(new MonedaSanguinaria(position = utilidadesParaJuego.posicionArbitraria()))
-		game.addVisual(new MonedaSanguinaria(position = utilidadesParaJuego.posicionArbitraria()))
-		game.addVisual(new MonedaSanguinaria(position = utilidadesParaJuego.posicionArbitraria()))
-		game.addVisual(new MonedaSanguinaria(position = utilidadesParaJuego.posicionArbitraria()))
-		game.addVisual(new MonedaSanguinaria(position = utilidadesParaJuego.posicionArbitraria()))
-		game.addVisual(new MonedaSanguinaria(position = utilidadesParaJuego.posicionArbitraria()))
-		game.addVisual(new MonedaSanguinaria(position = utilidadesParaJuego.posicionArbitraria()))
-		game.addVisual(new MonedaSanguinaria(position = utilidadesParaJuego.posicionArbitraria()))
-		game.addVisual(new MonedaSanguinaria(position = utilidadesParaJuego.posicionArbitraria()))
+		game.addVisual(new MonedaSanguinaria())
+		game.addVisual(new MonedaSanguinaria())
+		game.addVisual(new MonedaSanguinaria())
+		game.addVisual(new MonedaSanguinaria())
+		game.addVisual(new MonedaSanguinaria())
+		game.addVisual(new MonedaSanguinaria())
+		game.addVisual(new MonedaSanguinaria())
+		game.addVisual(new MonedaSanguinaria())
+		game.addVisual(new MonedaSanguinaria())
 
 	
 		// se agregan los indicadores
@@ -63,6 +71,9 @@ object nivelConEnemigos {
 		
 		//se agregan los enemigos
 		game.addVisual(orco1)
+
+		game.addVisual(orco4)
+		game.addVisual(orco5)
 		//game.addVisual(orco2)
 		game.addVisual(goblin1)
 		
@@ -97,7 +108,7 @@ object nivelConEnemigos {
         //otros
 		keyboard.g().onPressDo({ self.ganar()})
 		
-		keyboard.any().onPressDo({self.reproducir()self.aparecerSalida() self.verificaFinDeNivel()})
+		keyboard.any().onPressDo({self.reproducir() self.aparecerSalida() self.verificaFinDeNivel()})
 
 		
 		//colisiones.
