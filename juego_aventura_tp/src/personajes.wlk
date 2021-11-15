@@ -12,7 +12,7 @@ class Protagonista {
 	var property position = game.at(0, 1)
 	const property image = "knight_f_idle_anim_f0.png"
 	var property energia = 100
-	var property salud = 200
+	var property salud = 100
 	var property dinero = 0
 	var direccion = arriba
 	var property fragmentos = []
@@ -56,6 +56,21 @@ class Protagonista {
 		elemento.reaccionar(self)
 	// self.retroceder()
 	}
+	
+
+	method lanzarEspada(){
+		const espada = new Espada(position = direccion.siguiente(position))
+		
+		game.onTick(600, "lanzamientoEspada", {espada.avanzar()})
+		
+		game.addVisual(espada)
+		
+		game.onCollideDo(espada, {
+			e => espada.daniar(e)
+			game.removeVisual(espada)
+		})
+	}
+
 	
 	method direccion() = direccion
 

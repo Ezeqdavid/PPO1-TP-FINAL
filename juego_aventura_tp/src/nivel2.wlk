@@ -4,11 +4,12 @@ import personajes.*
 import utilidades.*
 import elementos.*
 import nivel3.*
+import EleccionFinal.*
 
 object nivelMonedas {
 	
     //se crea el prota
-	const personajeSimple = new Protagonista()
+	const personajeSimple = new Protagonista(salud = 30)
 	
 	var property monedasEnNivel = 0
 	
@@ -22,7 +23,6 @@ object nivelMonedas {
 		// fondo - es importante que sea el primer visual que se agregue
 		game.addVisual(new Fondo(image = "fondoCompleto.png"))
 		
-		//se crean y se agregan los cofres
 		/*
 		game.addVisual(new Cofre(position = utilidadesParaJuego.posicionArbitraria()))
 		game.addVisual(new Cofre(position = utilidadesParaJuego.posicionArbitraria()))
@@ -69,11 +69,14 @@ object nivelMonedas {
 		game.addVisual(personajeSimple)
 		
 		// teclado
+		
 		keyboard.i().onPressDo({game.allVisuals().forEach({o => game.say(o, o.toString())})})
 		
 		keyboard.space().onPressDo({game.say(personajeSimple, personajeSimple.informarEstado())})
 		
 		keyboard.x().onPressDo({personajeSimple.interactuar()})
+		
+		//movimiento
 			
 		keyboard.up().onPressDo({ personajeSimple.moverArriba()
 			personajeSimple.gastarEnergia() energia.visualizar(personajeSimple) salud.visualizar(personajeSimple) 
@@ -88,7 +91,8 @@ object nivelMonedas {
 			personajeSimple.gastarEnergia() energia.visualizar(personajeSimple) salud.visualizar(personajeSimple) 
 		})
 			
-
+        // otros 
+        
 		keyboard.g().onPressDo({ self.ganar()})
 		
 		keyboard.any().onPressDo({self.reproducir()self.aparecerSalida() self.verificaFinDeNivel()})
@@ -151,7 +155,7 @@ object nivelMonedas {
 			game.addVisual(new Fondo(image = "finNivel2.png"))
 				// después de un ratito ...
 			game.schedule(3000, { // fin del juego
-			nivelConEnemigos.configurate()})
+			pantallaEleccion.configurate()})
 		})
 	}
 

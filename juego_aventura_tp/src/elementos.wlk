@@ -2,8 +2,10 @@ import wollok.game.*
 import personajes.*
 import utilidades.*
 import personajes.*
+import direcciones.*
 import nivel1.*
 import nivel2.*
+import nivel3.*
 
 class PowerUp {
 	var property position 
@@ -46,11 +48,14 @@ class MonedaSanguinaria inherits PowerUp {
 	method initialize() {
 		nivelMonedas.monedasEnNivel(nivelMonedas.monedasEnNivel() + 1)
 	}
+	
 	override method reaccionar(personaje) {
 		super(personaje) 
 		personaje.dinero(personaje.dinero() + 5) 
 		personaje.salud(personaje.salud() - 5)
+		
 		nivelMonedas.monedasEnNivel(nivelMonedas.monedasEnNivel() - 1)
+		
 		nivelMonedas.aparecerSalida()
 	}
 }
@@ -201,6 +206,22 @@ object escalera {
 	}
 }
 
+class Espada{
+	var property position
+	var property image = "weapon_golden_sword.png"
+	var property direccion = arriba
+	
+	method daniar(enemigo){
+		enemigo.salud(enemigo.salud() - 20)
+	}
+	
+	method esMovible(){}
+	
+	method avanzar(){
+		position = direccion.siguiente(position)
+	}
+}
+
 object puertaSalida {
 	const property image = "door_open.png"
 	const property position = utilidadesParaJuego.posicionArbitraria()
@@ -210,3 +231,6 @@ object puertaSalida {
 		nivelMonedas.verificaFinDeNivel()
 	}
 }
+
+
+

@@ -2,11 +2,13 @@ import wollok.game.*
 import personajes.*
 import utilidades.*
 import personajes.*
+import nivel3.*
 
 class Enemigo {
 
 	var property position = utilidadesParaJuego.posicionArbitraria()
 	const property image
+	var  property salud = 100
 
 	method movimiento(personaje) {
 		game.schedule(5000, { => self.acercarseA(personaje)})
@@ -22,7 +24,6 @@ class Enemigo {
 	}
 
 	method daniar(personaje)
-
 }
 
 class Diablito inherits Enemigo {
@@ -38,7 +39,6 @@ class Goblin inherits Enemigo {
 	override method daniar(personaje) {
 		personaje.salud(personaje.salud() - 5)
 	}
-
 }
 
 class Orco inherits Enemigo {
