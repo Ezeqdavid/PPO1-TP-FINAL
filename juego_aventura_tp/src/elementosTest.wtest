@@ -17,6 +17,6 @@ describe "Test Elementos" {
 		game.addVisual(new MonedaSanguinaria(position = utilidadesParaJuego.posicionArbitraria()))
 		game.addVisual(new MonedaSanguinaria(position = utilidadesParaJuego.posicionArbitraria()))
 		
-		assert.equals(9, nivelLlaves.monedasEnNivel())
+		assert.equals(9, nivelMonedas.monedasEnNivel())
 	}
 }

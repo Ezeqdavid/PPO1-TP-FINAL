@@ -44,14 +44,14 @@ class MonedaSanguinaria inherits PowerUp {
 	const property image = "monedaSanguinaria.png"
 	
 	method initialize() {
-		nivelLlaves.monedasEnNivel(nivelLlaves.monedasEnNivel() + 1)
+		nivelMonedas.monedasEnNivel(nivelMonedas.monedasEnNivel() + 1)
 	}
 	override method reaccionar(personaje) {
 		super(personaje) 
 		personaje.dinero(personaje.dinero() + 5) 
 		personaje.salud(personaje.salud() - 5)
-		nivelLlaves.monedasEnNivel(nivelLlaves.monedasEnNivel() - 1)
-		nivelLlaves.aparecerSalida()
+		nivelMonedas.monedasEnNivel(nivelMonedas.monedasEnNivel() - 1)
+		nivelMonedas.aparecerSalida()
 	}
 }
 
@@ -207,6 +207,6 @@ object puertaSalida {
 	
 	method esMovible() = true
 	method reaccionar(personaje) {
-		nivelLlaves.verificaFinDeNivel()
+		nivelMonedas.verificaFinDeNivel()
 	}
 }

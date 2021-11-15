@@ -12,7 +12,7 @@ class Protagonista {
 	var property position = game.at(0, 1)
 	const property image = "knight_f_idle_anim_f0.png"
 	var property energia = 100
-	var property salud = 30
+	var property salud = 200
 	var property dinero = 0
 	var direccion = arriba
 	var property fragmentos = []
@@ -73,7 +73,7 @@ class Protagonista {
 		return "Energia : " + self.energia().stringValue() + " Salud es: " 
 				+ self.salud().stringValue() + " Dinero es: " + self.dinero().stringValue() 
 				+ " Fragmentos : " + self.fragmentos().size().stringValue() + " Monedas Faltantes : "
-				+ nivelLlaves.monedasEnNivel().stringValue()
+				+ nivelMonedas.monedasEnNivel().stringValue()
 	}
 	
 	method recogerFragmento(fragmento) {

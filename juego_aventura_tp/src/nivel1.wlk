@@ -156,7 +156,7 @@ object nivelBloques {
 			game.schedule(3000, { // ... limpio todo de nuevo
 				game.clear()
 					// y arranco el siguiente nivel
-				nivelLlaves.configurate()
+				nivelMonedas.configurate()
 			})
 		})
 	}

@@ -28,7 +28,7 @@ class Enemigo {
 class Diablito inherits Enemigo {
 
 	override method daniar(personaje) {
-		personaje.recibirDanio(self)
+		personaje.salud(personaje.salud() - 3) 
 	}
 
 }
@@ -36,7 +36,7 @@ class Diablito inherits Enemigo {
 class Goblin inherits Enemigo {
 
 	override method daniar(personaje) {
-		personaje.recibirDanio(self)
+		personaje.salud(personaje.salud() - 5)
 	}
 
 }
@@ -44,7 +44,7 @@ class Goblin inherits Enemigo {
 class Orco inherits Enemigo {
 
 	override method daniar(personaje) {
-		personaje.recibirDanio(self)
+		personaje.salud(personaje.salud() - 10)
 	}
 
 	override method acercarseA(personaje) {
