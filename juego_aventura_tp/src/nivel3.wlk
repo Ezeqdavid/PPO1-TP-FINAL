@@ -9,15 +9,22 @@ import nivel2.*
 object nivelConEnemigos {
 	
     //se crea el prota
-	const personajeSimple = new Protagonista()
+	const protaNivel3 = new Protagonista(salud = 200, image = "prota_nivel3.png")
 	 
 	//se crean los enemigos
-	const orco1 = new Orco()
-	const orco2 = new Orco()
-	const orco3 = new Orco()
+	const orco4 = new Orco()
+	const orco5 = new Orco()
+	const orco6 = new Orco()
 	
 	var property monedasEnNivel = 0
 	var property enemigos = 0
+  
+	const orco1 = new Orco(position = utilidadesParaJuego.posicionArbitraria(), image = "ogre_idle_anim_f0.png", salud = 200)
+	//const orco2 = new Orco(position = utilidadesParaJuego.posicionArbitraria(), image = "ogre_idle_anim_f0.png", salud=)
+	const goblin1 = new Goblin(position = utilidadesParaJuego.posicionArbitraria(), image = "goblin_idle_anim_f0.png", salud = 60 )
+	
+	var property enemigosEnNivel = []
+
 	
 	const property soundtrack = new Sound(file = "chopin_preludio4.mp3")
 	
@@ -64,47 +71,54 @@ object nivelConEnemigos {
 		
 		//se agregan los enemigos
 		game.addVisual(orco1)
-		game.addVisual(orco2)
-		game.addVisual(orco3)
+
+		game.addVisual(orco4)
+		game.addVisual(orco5)
+		//game.addVisual(orco2)
+		game.addVisual(goblin1)
+		
+	   self.enemigosEnNivel().addAll([orco1,goblin1])
 		
         //se agrega el prota 
-		game.addVisual(personajeSimple)
+		game.addVisual(protaNivel3)
 		
 		// teclado
 		keyboard.i().onPressDo({game.allVisuals().forEach({o => game.say(o, o.toString())})})
 		
-		keyboard.space().onPressDo({game.say(personajeSimple, personajeSimple.informarEstado())})
+		keyboard.space().onPressDo({game.say(protaNivel3, protaNivel3.informarEstado())})
 		
-		keyboard.x().onPressDo({personajeSimple.interactuar()})
+		keyboard.x().onPressDo({protaNivel3.interactuar()})
+		
+		keyboard.h().onPressDo({protaNivel3.lanzarEspada()})
 			
-		keyboard.up().onPressDo({ personajeSimple.moverArriba()
-			personajeSimple.gastarEnergia() energia.visualizar(personajeSimple) salud.visualizar(personajeSimple) 
+		//movimiento
+		keyboard.up().onPressDo({ protaNivel3.moverArriba()
+			protaNivel3.gastarEnergia() energia.visualizar(protaNivel3) salud.visualizar(protaNivel3) 
 		})
-		keyboard.down().onPressDo({ personajeSimple.moverAbajo()
-			personajeSimple.gastarEnergia() energia.visualizar(personajeSimple) salud.visualizar(personajeSimple) 
+		keyboard.down().onPressDo({ protaNivel3.moverAbajo()
+			protaNivel3.gastarEnergia() energia.visualizar(protaNivel3) salud.visualizar(protaNivel3) 
 		})
-		keyboard.right().onPressDo({ personajeSimple.moverDerecha()
-			personajeSimple.gastarEnergia() energia.visualizar(personajeSimple) salud.visualizar(personajeSimple) 
+		keyboard.right().onPressDo({ protaNivel3.moverDerecha()
+			protaNivel3.gastarEnergia() energia.visualizar(protaNivel3) salud.visualizar(protaNivel3) 
 		})
-		keyboard.left().onPressDo({ personajeSimple.moverIzquierda()
-			personajeSimple.gastarEnergia() energia.visualizar(personajeSimple) salud.visualizar(personajeSimple) 
+		keyboard.left().onPressDo({ protaNivel3.moverIzquierda()
+			protaNivel3.gastarEnergia() energia.visualizar(protaNivel3) salud.visualizar(protaNivel3) 
 		})
 			
-
+        //otros
 		keyboard.g().onPressDo({ self.ganar()})
 		
 		keyboard.any().onPressDo({self.reproducir() self.aparecerSalida() self.verificaFinDeNivel()})
 
 		
 		//colisiones.
-	    game.onCollideDo(personajeSimple, {o => personajeSimple.accionar(o)})
+	    game.onCollideDo(protaNivel3, {o => protaNivel3.accionar(o)})
+	    game.whenCollideDo(orco1, {p => orco1.daniar(protaNivel3)})
 	    
 	    //evento enemigos
 	    
-	    game.onTick(3500, "movimientoEnemigos", {
-	       orco1.acercarseA(personajeSimple)
-	       //orco2.acercarseA(personajeSimple)
-	    })
+	    game.onTick(2800, "movimientoOrco", {orco1.acercarseA(protaNivel3)})
+	    game.onTick(2800, "movimientoGoblin", {goblin1.acercarseA(protaNivel3)})
 	}
 	
 	method reproducir() {
@@ -121,15 +135,18 @@ object nivelConEnemigos {
 		}
 	}
 	
-	method condicionDeNivel() {return self.monedasEnNivel() == 0 and personajeSimple.energia() > 0}
+	method condicionDeNivel() {return self.todosEnemigosMuertos() and protaNivel3.energia() > 0}
 	
 	method verificaFinDeNivel() {
-		if (personajeSimple.energia() <= 0 or personajeSimple.salud() <= 0) {
+		if (protaNivel3.energia() <= 0 or protaNivel3.salud() <= 0) {
 			self.perder()
-		} else if (personajeSimple.position() == puertaSalida.position() and game.hasVisual(puertaSalida)) {
+		} else if (protaNivel3.position() == puertaSalida.position() and game.hasVisual(puertaSalida)) {
 			self.ganar()
 		}
 	}
+	
+	method todosEnemigosMuertos() = enemigosEnNivel.all({e => e.salud() == 0})
+
 	
 	method perder() {
 		game.clear()
@@ -138,7 +155,7 @@ object nivelConEnemigos {
 		
 		game.addVisual(new Fondo(image = "fondoCompleto.png"))
 		
-		game.addVisual(personajeSimple)
+		game.addVisual(protaNivel3)
 		
 		game.schedule(3500, {game.clear()})
 		
