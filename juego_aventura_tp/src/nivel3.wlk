@@ -9,7 +9,7 @@ import nivel2.*
 object nivelConEnemigos {
 	
     //se crea el prota
-	const protaNivel3 = new Protagonista(salud = 200, image = "prota_nivel3.png")
+	const protaNivel3 = new Protagonista(position= game.at(1,1), salud = 3000 ,energia = 500, image = "prota_nivel3.png")
 	 
 	//se crean los enemigos
 	const orco4 = new Orco()
@@ -18,9 +18,9 @@ object nivelConEnemigos {
 	
 	var property monedasEnNivel = 0
   
-	const orco1 = new Orco(position = utilidadesParaJuego.posicionArbitraria(), image = "ogre_idle_anim_f0.png", salud = 200)
+	const orco1 = new Orco(image = "ogre_idle_anim_f0.png", salud = 10)
 	//const orco2 = new Orco(position = utilidadesParaJuego.posicionArbitraria(), image = "ogre_idle_anim_f0.png", salud=)
-	const goblin1 = new Goblin(position = utilidadesParaJuego.posicionArbitraria(), image = "goblin_idle_anim_f0.png", salud = 60 )
+	const goblin1 = new Goblin(image = "goblin_idle_anim_f0.png", salud = 10 )
 	
 	var property enemigosEnNivel = []
 
@@ -56,13 +56,6 @@ object nivelConEnemigos {
 		game.addVisual(new MonedaSanguinaria())
 		game.addVisual(new MonedaSanguinaria())
 		game.addVisual(new MonedaSanguinaria())
-		game.addVisual(new MonedaSanguinaria())
-		game.addVisual(new MonedaSanguinaria())
-		game.addVisual(new MonedaSanguinaria())
-		game.addVisual(new MonedaSanguinaria())
-		game.addVisual(new MonedaSanguinaria())
-		game.addVisual(new MonedaSanguinaria())
-
 	
 		// se agregan los indicadores
 		game.addVisual(energia)
@@ -71,8 +64,8 @@ object nivelConEnemigos {
 		//se agregan los enemigos
 		game.addVisual(orco1)
 
-		game.addVisual(orco4)
-		game.addVisual(orco5)
+		//game.addVisual(orco4)
+		//game.addVisual(orco5)
 		//game.addVisual(orco2)
 		game.addVisual(goblin1)
 		
@@ -89,6 +82,8 @@ object nivelConEnemigos {
 		keyboard.x().onPressDo({protaNivel3.interactuar()})
 		
 		keyboard.h().onPressDo({protaNivel3.lanzarEspada()})
+		
+		keyboard.l().onPressDo({self.terminarEventoGoblin() self.terminarEventoOrco()})
 			
 		//movimiento
 		keyboard.up().onPressDo({ protaNivel3.moverArriba()
@@ -134,7 +129,7 @@ object nivelConEnemigos {
 		}
 	}
 	
-	method condicionDeNivel() {return self.todosEnemigosMuertos() and protaNivel3.energia() > 0}
+	method condicionDeNivel() {return self.todosEnemigosMuertos() and protaNivel3.energia() > 0 and protaNivel3.salud() > 0}
 	
 	method verificaFinDeNivel() {
 		if (protaNivel3.energia() <= 0 or protaNivel3.salud() <= 0) {
@@ -144,7 +139,14 @@ object nivelConEnemigos {
 		}
 	}
 	
-	method todosEnemigosMuertos() = enemigosEnNivel.all({e => e.salud() == 0})
+	method todosEnemigosMuertos() = enemigosEnNivel.all({e => e.salud() <= 0})
+	
+	method terminarEventoOrco(){
+		game.removeTickEvent("movimientoOrco")
+	}
+	method terminarEventoGoblin(){
+		game.removeTickEvent("movimientoGoblin")
+	}
 
 	
 	method perder() {

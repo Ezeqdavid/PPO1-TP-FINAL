@@ -17,6 +17,7 @@ class PowerUp {
 		game.removeVisual(self)
 	}
 	method esMovible() {return true}
+	method recibirDanio(){}
 }
 
 class PocionMana inherits PowerUp{
@@ -78,6 +79,7 @@ class Cofre {
 	var property position = utilidadesParaJuego.posicionArbitrariaParaCofres() 
 	
 	method esMovible() {return true}
+	method recibirDanio(){}
 
 	method reaccionar(personaje) {
 		const sound = new Sound(file = "colisioncaja.mp3")
@@ -102,6 +104,7 @@ class FragmentoEspada {
 		game.removeVisual(self)
 	}
 	method esMovible() {return true}
+	method recibirDanio(){}
 }
 
 class CeldaSorpresa {
@@ -109,6 +112,7 @@ class CeldaSorpresa {
 	var property position = utilidadesParaJuego.posicionArbitraria()
 	method reaccionar(personaje) {game.removeVisual(self)}
 	method esMovible() {return true} 
+	method recibirDanio(){}
 }
 
 class CeldaQuitaEnergia inherits CeldaSorpresa {
@@ -139,6 +143,7 @@ class Indicador {
 	method visualizar(personaje)
 
 	method esMovible() = false
+	method recibirDanio(){}
 
 }
 
@@ -158,6 +163,7 @@ class IndicadorSalud inherits Indicador {
 }
 
 class IndicadorEnergia inherits Indicador {
+
 	method initialize() {
 		self.image("Energia_full.png")
 		self.position(game.at(1,0))
@@ -186,7 +192,8 @@ object forja {
 	var property fragmentos = []
 	var property objetivoLogrado = false
 	
-	method esMovible() {return false}	
+	method esMovible() {return false}
+	method recibirDanio(){}	
 	
 	method reaccionar(personaje) {
 		const sound = new Sound(file = "logro.mp3")
@@ -208,6 +215,7 @@ object escalera {
 	var property objetivoLogrado = false
 	
 	method esMovible() {return false}
+	method recibirDanio(){}
 	
 	method reaccionar(cofre) {
 		const sound = new Sound(file = "logro.mp3")
@@ -244,7 +252,7 @@ class Espada{
 	}
 	
 	method daniar(enemigo){
-		enemigo.salud(enemigo.salud() - 20)
+		enemigo.recibirDanio()
 	}
 	
 	method esMovible(){}
@@ -262,6 +270,7 @@ object puertaSalida {
 	method reaccionar(personaje) {
 		nivelMonedas.verificaFinDeNivel()
 	}
+	method recibirDanio(){}
 }
 
 

@@ -23,10 +23,11 @@ class Enemigo {
 		newY = newY.max(0).min(game.height() - 1)
 		position = game.at(newX, newY)
 	}
-
+method recibirDanio(){
+	salud -= 40
+}
 
 method reaccionar(personaje){}
-	
 method daniar(personaje){}
 
 }
@@ -37,7 +38,7 @@ class Diablito inherits Enemigo {
 		self.salud(20)
 	}
 	
-	override method reaccionar(personaje) {
+	override method daniar(personaje) {
 		personaje.recibirDanio()
 	}
 
@@ -48,8 +49,18 @@ class Goblin inherits Enemigo {
 	method initialize() {
 		self.salud(40)
 	}
-	override method reaccionar(personaje) {
+	override method daniar(personaje) {
 		personaje.recibirDanio()
+	}
+	
+	override method recibirDanio(){
+		const sound = new Sound(file = "hit.mp3")
+		super()
+		sound.play()
+		if(salud <= 0){
+			image = "goblinMuerto.png"
+			nivelConEnemigos.terminarEventoGoblin()
+		}
 	}
 }
 
@@ -58,8 +69,17 @@ class Orco inherits Enemigo {
 		self.salud(60)
 		self.image("ogre_idle_anim_f0.png")
 	}
-	override method reaccionar(personaje) {
+	override method daniar(personaje) {
 		personaje.recibirDanio()
+	}
+	override method recibirDanio(){
+		const sound = new Sound(file = "hit2.mp3")
+		super()
+		sound.play()
+		if(salud <= 0){
+			image = "orcoMuerto.png"
+			nivelConEnemigos.terminarEventoOrco()
+		}
 	}
 
 }
