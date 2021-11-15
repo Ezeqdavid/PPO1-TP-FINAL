@@ -17,7 +17,6 @@ object nivelConEnemigos {
 	const orco6 = new Orco()
 	
 	var property monedasEnNivel = 0
-	var property enemigos = 0
   
 	const orco1 = new Orco(position = utilidadesParaJuego.posicionArbitraria(), image = "ogre_idle_anim_f0.png", salud = 200)
 	//const orco2 = new Orco(position = utilidadesParaJuego.posicionArbitraria(), image = "ogre_idle_anim_f0.png", salud=)

@@ -2,13 +2,21 @@ import wollok.game.*
 import direcciones.*
 
 object utilidadesParaJuego {
-
+	
 	method posicionArbitraria() {
-		return game.at(0.randomUpTo(game.width()).truncate(0), 1.randomUpTo(game.height()).truncate(0))
+		const position = game.at(0.randomUpTo(game.width()).truncate(0), 1.randomUpTo(game.height()).truncate(0))
+		 if (game.getObjectsIn(position).any{e => !e.esMovible()}) {
+		 	self.posicionArbitraria()
+		 } 
+		 return position
 	}
 	
 	method posicionArbitrariaParaCofres() {
-		return game.at(1.randomUpTo(game.width().truncate(0) - 1), 2.randomUpTo(game.height().truncate(0) - 1))
+		const position = game.at(1.randomUpTo(game.width().truncate(0) - 1), 2.randomUpTo(game.height().truncate(0) - 1))
+		 if (game.getObjectsIn(position).any{e => !e.esMovible()}) {
+		 	self.posicionArbitraria()
+		 } 
+		 return position
 	}
 }
 

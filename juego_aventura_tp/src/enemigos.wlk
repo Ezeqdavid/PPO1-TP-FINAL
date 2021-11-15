@@ -12,7 +12,9 @@ class Enemigo {
 	method movimiento(personaje) {
 		game.schedule(5000, { => self.acercarseA(personaje)})
 	}
-
+	
+	method esMovible() = true
+	
 	method acercarseA(personaje) {
 		const otroPosicion = personaje.position()
 		var newX = position.x() + if (otroPosicion.x() > position.x()) 1 else -1
@@ -23,9 +25,9 @@ class Enemigo {
 	}
 
 
-method reaccionar(personaje)
+method reaccionar(personaje){}
 	
-method daniar(personaje)
+method daniar(personaje){}
 
 }
 

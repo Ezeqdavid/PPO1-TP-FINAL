@@ -75,7 +75,7 @@ class MonedaSanguinaria inherits Monedas {
 class Cofre {
 	const property image = "chest_empty_open_anim_f0.png"
 	
-	var property position 
+	var property position = utilidadesParaJuego.posicionArbitrariaParaCofres() 
 	
 	method esMovible() {return true}
 
@@ -224,8 +224,24 @@ object escalera {
 
 class Espada{
 	var property position
-	var property image = "weapon_golden_sword.png"
-	var property direccion = arriba
+	var property image = null
+	var property direccion
+	
+	method initialize() {
+		self.spriteCorrecto()
+	} 
+	
+	method spriteCorrecto() {
+		if (self.direccion() == arriba) {
+			self.image("espadaDorada_arriba.png")
+		} else if (self.direccion() == derecha) {
+			self.image("espadaDorada_derecha.png")
+		} else if (self.direccion() == abajo) {
+			self.image("espadaDorada_abajo.png")
+		} else if (self.direccion() == izquierda) {
+			self.image("espadaDorada_izquierda.png")
+		}
+	}
 	
 	method daniar(enemigo){
 		enemigo.salud(enemigo.salud() - 20)
@@ -233,7 +249,7 @@ class Espada{
 	
 	method esMovible(){}
 	
-	method avanzar(){
+	method avanzar(personaje){
 		position = direccion.siguiente(position)
 	}
 }

@@ -11,12 +11,13 @@ object nivelBloques {
 	const prota1 = new Protagonista()
 	
 	const property soundtrack = new Sound(file = "danzamacabra.mp3")
-	
+	const property inicioJuego = new Fondo(image = "Bienvenidos.png")
     // se crean los fragmentos
 	const fragmento1 = new FragmentoEspada(position = utilidadesParaJuego.posicionArbitraria(), image = "Fragment_1_golden_sword.png")
 	const fragmento2 = new FragmentoEspada(position = utilidadesParaJuego.posicionArbitraria(), image = "Fragment_2_golden_sword.png")
 	const fragmento3 = new FragmentoEspada(position = utilidadesParaJuego.posicionArbitraria(), image ="Broken_golden_sword.png" )
 	const fragmento4 = new FragmentoEspada(position = utilidadesParaJuego.posicionArbitraria(), image = "Gem_golden_sword.png")
+	
 	
 	//se crean los indicadores
 	const energiaIndicador = new IndicadorEnergia(position = game.at(1,0))
@@ -35,13 +36,6 @@ object nivelBloques {
 		game.addVisual(new CeldaAgregaEnergia(position = utilidadesParaJuego.posicionArbitraria()))
 		game.addVisual(new CeldaTeletransportadora(position = utilidadesParaJuego.posicionArbitraria()))
 		
-		//pociones
-		game.addVisual(new VesselMana(position = utilidadesParaJuego.posicionArbitraria()))
-		game.addVisual(new PocionMana(position = utilidadesParaJuego.posicionArbitraria()))
-		game.addVisual(new PocionMana(position = utilidadesParaJuego.posicionArbitraria()))
-		
-		//moneda
-		game.addVisual(new Monedas(position = utilidadesParaJuego.posicionArbitraria())) 
 		
 		//escalera y cofres
 		game.addVisual(escalera)
@@ -67,6 +61,7 @@ object nivelBloques {
 		game.onCollideDo(prota1, {o => prota1.accionar(o)})
 		game.onCollideDo(escalera, {cofre => escalera.reaccionar(cofre)})
 		
+		game.addVisual(inicioJuego)
 		// teclado
 		// este es para probar, no es necesario dejarlo
 		keyboard.t().onPressDo({ self.terminar()})
@@ -86,7 +81,20 @@ object nivelBloques {
 		keyboard.space().onPressDo({game.say(prota1, prota1.informarEstado())})
 		
 		keyboard.x().onPressDo({prota1.interactuar()})
-			
+		
+		keyboard.enter().onPressDo({self.reproducir() self.generarPowerUpsEnJuego() self.configurarMovimientoTeclado() game.removeVisual(inicioJuego)})
+
+	}
+	
+	method reproducir() {
+		if (!self.soundtrack().played()) {
+			self.soundtrack().shouldLoop(true)
+			self.soundtrack().volume(0.6)
+			self.soundtrack().play()
+		}
+	}
+	
+	method configurarMovimientoTeclado() {
 		keyboard.up().onPressDo({ prota1.moverArriba()
 			prota1.gastarEnergia() self.verificaFinDeNivel() energiaIndicador.visualizar(prota1)
 		})
@@ -99,17 +107,12 @@ object nivelBloques {
 		keyboard.left().onPressDo({ prota1.moverIzquierda()
 			prota1.gastarEnergia() self.verificaFinDeNivel() energiaIndicador.visualizar(prota1)
 		})
-		
-		keyboard.any().onPressDo({self.reproducir()})
-
 	}
 	
-	method reproducir() {
-		if (!self.soundtrack().played()) {
-			self.soundtrack().shouldLoop(true)
-			self.soundtrack().volume(0.6)
-			self.soundtrack().play()
-		}
+	method generarPowerUpsEnJuego() {
+		game.onTick(7000, "Pociones",{ => game.addVisual(new PocionMana())})
+		game.onTick(5000, "Monedas", { => game.addVisual(new Monedas())})
+		game.onTick(3000, "VesselPocion", { => game.addVisual(new VesselMana())})
 	}
 	
 	method perder() {

@@ -14,6 +14,7 @@ object nivelMonedas {
 	var property monedasEnNivel = 0
 	
 	const property soundtrack = new Sound(file = "chopin_preludio4.mp3")
+	const instructivoNivel2 = new Fondo(image = "InstructivoNivel2.png")
 	
 	//se crean los indicadores
 	const energia = new IndicadorEnergia(position = game.at(1,0))
@@ -50,16 +51,15 @@ object nivelMonedas {
 		game.addVisual(new VesselSalud(position = utilidadesParaJuego.posicionArbitraria()))
 		
 		//se crean y se agregan monedas Sanguinarias
-		game.addVisual(new MonedaSanguinaria(position = utilidadesParaJuego.posicionArbitraria()))
-		game.addVisual(new MonedaSanguinaria(position = utilidadesParaJuego.posicionArbitraria()))
-		game.addVisual(new MonedaSanguinaria(position = utilidadesParaJuego.posicionArbitraria()))
-		game.addVisual(new MonedaSanguinaria(position = utilidadesParaJuego.posicionArbitraria()))
-		game.addVisual(new MonedaSanguinaria(position = utilidadesParaJuego.posicionArbitraria()))
-		game.addVisual(new MonedaSanguinaria(position = utilidadesParaJuego.posicionArbitraria()))
-		game.addVisual(new MonedaSanguinaria(position = utilidadesParaJuego.posicionArbitraria()))
-		game.addVisual(new MonedaSanguinaria(position = utilidadesParaJuego.posicionArbitraria()))
-		game.addVisual(new MonedaSanguinaria(position = utilidadesParaJuego.posicionArbitraria()))
-
+		game.addVisual(new MonedaSanguinaria())
+		game.addVisual(new MonedaSanguinaria())
+		game.addVisual(new MonedaSanguinaria())
+		game.addVisual(new MonedaSanguinaria())
+		game.addVisual(new MonedaSanguinaria())
+		game.addVisual(new MonedaSanguinaria())
+		game.addVisual(new MonedaSanguinaria())
+		game.addVisual(new MonedaSanguinaria())
+		game.addVisual(new MonedaSanguinaria())
 	
 		// se agregan los indicadores
 		game.addVisual(energia)
@@ -68,6 +68,7 @@ object nivelMonedas {
         //se agrega el prota 
 		game.addVisual(personajeSimple)
 		
+		game.addVisual(instructivoNivel2)
 		// teclado
 		
 		keyboard.i().onPressDo({game.allVisuals().forEach({o => game.say(o, o.toString())})})
@@ -76,8 +77,26 @@ object nivelMonedas {
 		
 		keyboard.x().onPressDo({personajeSimple.interactuar()})
 		
-		//movimiento
-			
+        // otros 
+        
+        keyboard.enter().onPressDo({self.reproducir() self.generarPowerUpsEnJuego() self.configurarMovimientoTeclado() game.removeVisual(instructivoNivel2)})
+		keyboard.g().onPressDo({ self.ganar()})
+		
+		keyboard.any().onPressDo({self.aparecerSalida() self.verificaFinDeNivel()})
+		
+		//colisiones.
+	    game.onCollideDo(personajeSimple, {o => personajeSimple.accionar(o)})
+	}
+	
+	method reproducir() {
+		if (!self.soundtrack().played()) {
+			self.soundtrack().shouldLoop(true)
+			self.soundtrack().volume(0.4)
+			self.soundtrack().play()
+		}
+	}
+	
+	method configurarMovimientoTeclado() {
 		keyboard.up().onPressDo({ personajeSimple.moverArriba()
 			personajeSimple.gastarEnergia() energia.visualizar(personajeSimple) salud.visualizar(personajeSimple) 
 		})
@@ -90,23 +109,14 @@ object nivelMonedas {
 		keyboard.left().onPressDo({ personajeSimple.moverIzquierda()
 			personajeSimple.gastarEnergia() energia.visualizar(personajeSimple) salud.visualizar(personajeSimple) 
 		})
-			
-        // otros 
-        
-		keyboard.g().onPressDo({ self.ganar()})
-		
-		keyboard.any().onPressDo({self.reproducir()self.aparecerSalida() self.verificaFinDeNivel()})
-		
-		//colisiones.
-	    game.onCollideDo(personajeSimple, {o => personajeSimple.accionar(o)})
 	}
 	
-	method reproducir() {
-		if (!self.soundtrack().played()) {
-			self.soundtrack().shouldLoop(true)
-			self.soundtrack().volume(0.4)
-			self.soundtrack().play()
-		}
+	method generarPowerUpsEnJuego() {
+		game.onTick(7270, "PocionMana",{ => game.addVisual(new PocionMana())})
+		game.onTick(5350, "Monedas", { => game.addVisual(new Monedas())})
+		game.onTick(3128, "VesselPocion", { => game.addVisual(new VesselMana())})
+		game.onTick(4275, "VesselSalud", { => game.addVisual(new VesselSalud())})
+		game.onTick(5700, "PocionSalud", { => game.addVisual(new PocionSalud())})
 	}
 	
 	method aparecerSalida() {

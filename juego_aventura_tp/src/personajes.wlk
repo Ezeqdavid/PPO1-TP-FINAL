@@ -59,9 +59,9 @@ class Protagonista {
 	
 
 	method lanzarEspada(){
-		const espada = new Espada(position = direccion.siguiente(position))
+		const espada = new Espada(position = direccion.siguiente(position), direccion = self.direccion())
 		
-		game.onTick(600, "lanzamientoEspada", {espada.avanzar()})
+		game.onTick(600, "lanzamientoEspada", {espada.avanzar(self)})
 		
 		game.addVisual(espada)
 		
