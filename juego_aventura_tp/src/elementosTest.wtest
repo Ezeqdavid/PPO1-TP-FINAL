@@ -1,0 +1,22 @@
+import elementos.*
+import wollok.game.*
+import nivel2.*
+import personajes.*
+import utilidades.*
+
+describe "Test Elementos" {
+	
+	test "monedas" {
+		game.addVisual(new MonedaSanguinaria(position = utilidadesParaJuego.posicionArbitraria()))
+		game.addVisual(new MonedaSanguinaria(position = utilidadesParaJuego.posicionArbitraria()))
+		game.addVisual(new MonedaSanguinaria(position = utilidadesParaJuego.posicionArbitraria()))
+		game.addVisual(new MonedaSanguinaria(position = utilidadesParaJuego.posicionArbitraria()))
+		game.addVisual(new MonedaSanguinaria(position = utilidadesParaJuego.posicionArbitraria()))
+		game.addVisual(new MonedaSanguinaria(position = utilidadesParaJuego.posicionArbitraria()))
+		game.addVisual(new MonedaSanguinaria(position = utilidadesParaJuego.posicionArbitraria()))
+		game.addVisual(new MonedaSanguinaria(position = utilidadesParaJuego.posicionArbitraria()))
+		game.addVisual(new MonedaSanguinaria(position = utilidadesParaJuego.posicionArbitraria()))
+		
+		assert.equals(9, nivelLlaves.monedasEnNivel())
+	}
+}

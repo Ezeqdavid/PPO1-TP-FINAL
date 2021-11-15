@@ -9,6 +9,8 @@ object nivelLlaves {
     //se crea el prota
 	const personajeSimple = new Protagonista()
 	
+	var property monedasEnNivel = 0
+	
 	//se crean los indicadores
 	const energia = new IndicadorEnergia(position = game.at(1,0))
 	const salud = new IndicadorSalud(position = game.at(0,0))
@@ -106,19 +108,9 @@ object nivelLlaves {
 		if (self.condicionDeNivel() and !game.hasVisual(puertaSalida)) {
 			game.addVisual(puertaSalida)	
 		}
-		else {}
 	}
 	
-	method condicionDeNivel() = personajeSimple.dinero() == 60 and personajeSimple.energia() > 0
-	
-	/* 
-	method condicionDeNivel() {
-		return !game.allVisuals().any({v => v == new Monedas(position = utilidadesParaJuego.posicionArbitraria())}) and 
-			   !game.allVisuals().any({v => v == new MonedaSanguinaria(position = utilidadesParaJuego.posicionArbitraria())}) and
-			   personajeSimple.energia() > 0
-	}
-	* 
-	*/
+	method condicionDeNivel() {return self.monedasEnNivel() == 0 and personajeSimple.energia() > 0}
 	
 	method verificaFinDeNivel() {
 		if (personajeSimple.energia() <= 0 or personajeSimple.salud() <= 0) {

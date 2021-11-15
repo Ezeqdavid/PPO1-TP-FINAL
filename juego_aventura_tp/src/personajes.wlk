@@ -2,6 +2,7 @@ import wollok.game.*
 import direcciones.*
 import nivel1.*
 import elementos.*
+import nivel2.*
 
 // en la implementación real, conviene tener un personaje por nivel
 // los personajes probablemente tengan un comportamiendo más complejo que solamente
@@ -71,7 +72,8 @@ class Protagonista {
 	method informarEstado() {
 		return "Energia : " + self.energia().stringValue() + " Salud es: " 
 				+ self.salud().stringValue() + " Dinero es: " + self.dinero().stringValue() 
-				+ " Fragmentos : " + self.fragmentos().size().stringValue()
+				+ " Fragmentos : " + self.fragmentos().size().stringValue() + " Monedas Faltantes : "
+				+ nivelLlaves.monedasEnNivel().stringValue()
 	}
 	
 	method recogerFragmento(fragmento) {
