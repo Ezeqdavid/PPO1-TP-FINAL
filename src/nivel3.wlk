@@ -16,7 +16,7 @@ object nivelConEnemigos {
 	//se crean los enemigos
 	
 	var property monedasEnNivel = 0
-  
+  	var property powerUpsEnNivel = 0
   	var property enemigosEnNivel = []
 
 	const property soundtrack = new Sound(file = "chopin_preludio4.mp3")
@@ -85,7 +85,7 @@ object nivelConEnemigos {
 		
 		keyboard.any().onPressDo({self.aparecerSalida() self.verificaFinDeNivel()})
 		
-		keyboard.enter().onPressDo({self.configurarMovimientoTeclado() self.activarEnemigos() self.generarPowerUpsEnJuego() self.reproducir() game.removeVisual(instructivoNivel3)})
+		keyboard.enter().onPressDo({game.removeVisual(instructivoNivel3) self.configurarMovimientoTeclado() self.activarEnemigos() self.corroborarCantidadPowerUps() self.reproducir() })
 		
 		//colisiones.
 	   game.onCollideDo(protaNivel3, {o => protaNivel3.accionar(o)})
@@ -116,11 +116,24 @@ object nivelConEnemigos {
 		}
 	}
 	
+	method corroborarCantidadPowerUps() {
+		if (self.powerUpsEnNivel() > 15) {
+			self.detenerGeneracionDePowerUps() 
+		} else {
+			self.generarPowerUpsEnJuego()
+		}
+	}
 	
+	method detenerGeneracionDePowerUps() {
+		game.removeTickEvent("Monedas")
+		game.removeTickEvent("VesselPocion")
+		game.removeTickEvent("PocionMana")
+	}
 	method generarPowerUpsEnJuego() {
-		game.onTick(7000, "Pociones",{ => game.addVisual(new PocionMana())})
-		game.onTick(5000, "Monedas", { => game.addVisual(new Monedas())})
+		game.onTick(7000, "PocionesMana",{ => game.addVisual(new PocionMana())})
+		game.onTick(8000, "Monedas", { => game.addVisual(new Monedas())})
 		game.onTick(3000, "VesselPocion", { => game.addVisual(new VesselMana())})
+		game.onTick(6000, "PocionSalud", { => game.addVisual(new PocionSalud())})
 	}
 
 	method aparecerSalida() {
@@ -171,7 +184,7 @@ object nivelConEnemigos {
 		// el perder() también va a ser parecido
 		// game.clear() limpia visuals, teclado, colisiones y acciones
 		game.clear()
-		//soundtrack.stop()
+		soundtrack.stop()
 			// después puedo volver a agregar el fondo, y algún visual para que no quede tan pelado
 		game.addVisual(new Fondo(image = "fondoCompleto.png"))
 			// después de un ratito ...

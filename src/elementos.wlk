@@ -28,6 +28,12 @@ class PowerUp inherits Elemento{
 	var property position = utilidadesParaJuego.posicionArbitraria()
 	var property image = "flask_big_blue.png"
 	
+	method initialize() {
+		nivelBloques.powerUpsEnNivel(nivelBloques.powerUpsEnNivel() + 1) 
+		nivelConEnemigos.powerUpsEnNivel(nivelConEnemigos.powerUpsEnNivel() + 1) 
+		nivelMonedas.powerUpsEnNivel(nivelMonedas.powerUpsEnNivel() + 1)
+	}
+	
 	override method reaccionar(personaje) {
 		const sound = new Sound(file = "powerUp.mp3")
 		sound.volume(0.7)
@@ -37,44 +43,48 @@ class PowerUp inherits Elemento{
 }
 
 class PocionMana inherits PowerUp{
-	method initialize() {
+	override method initialize() {
+		super()
 		self.image("flask_big_blue.png")
 	}
 	override method reaccionar(personaje) {super(personaje) personaje.energia(personaje.energia() + 20)}
 }
 
 class VesselMana inherits PowerUp {
-	
-	method initialize() {
+	override method initialize() {
+		super()
 		self.image("flask_blue.png")
 	}
 	override method reaccionar(personaje) {super(personaje) personaje.energia(personaje.energia() + 10)}
 }
 
 class PocionSalud inherits PowerUp {
-	
-	method initialize() {
+	override method initialize() {
+		super()
 		self.image("flask_big_red.png")
 	}
 	override method reaccionar(personaje) {super(personaje) personaje.salud(personaje.salud() + 20)}
 }
 
 class VesselSalud inherits PowerUp {
-	method initialize() {
+	override method initialize() {
+		super()
 		self.image("flask_red.png")
 	}
 	override method reaccionar(personaje) {super(personaje) personaje.salud(personaje.salud() + 10)}
 }
 
 class Monedas inherits PowerUp {
-	method initialize() {
+	override method initialize() {
+		super()
 		self.image("coin_anim_f0.png")
 	}
 	override method reaccionar(personaje) {super(personaje) personaje.dinero(personaje.dinero() + 5)}
 }
 
 class MonedaSanguinaria inherits Monedas {
-	method initialize() {
+	override method initialize() {
+		super()
 		self.image("monedaSanguinaria.png")
 		nivelMonedas.monedasEnNivel(nivelMonedas.monedasEnNivel() + 1)
 	}
