@@ -11,7 +11,7 @@ object nivelMonedas {
 	const personajeSimple = new Protagonista(salud = 30)
 	
 	var property monedasEnNivel = 0
-	
+	var property powerUpsEnNivel = 0
 	const property soundtrack = new Sound(file = "chopin_preludio4.mp3")
 	const instructivoNivel2 = new Fondo(image = "InstructivoNivel2.png")
 	
@@ -70,7 +70,7 @@ object nivelMonedas {
 		
         // otros 
         
-        keyboard.enter().onPressDo({self.reproducir() self.generarPowerUpsEnJuego() self.configurarMovimientoTeclado() game.removeVisual(instructivoNivel2)})
+        keyboard.enter().onPressDo({self.reproducir() self.corroborarCantidadPowerUps() self.configurarMovimientoTeclado() game.removeVisual(instructivoNivel2)})
 		keyboard.g().onPressDo({ self.ganar()})
 		
 		keyboard.any().onPressDo({self.aparecerSalida() self.verificaFinDeNivel()})
@@ -102,12 +102,24 @@ object nivelMonedas {
 		})
 	}
 	
+	method corroborarCantidadPowerUps() {
+		if (self.powerUpsEnNivel() > 15) {
+			self.detenerGeneracionDePowerUps() 
+		} else {
+			self.generarPowerUpsEnJuego()
+		}
+	}
+	
+	method detenerGeneracionDePowerUps() {
+		game.removeTickEvent("Monedas")
+		game.removeTickEvent("VesselPocion")
+		game.removeTickEvent("PocionMana")
+	}
 	method generarPowerUpsEnJuego() {
-		game.onTick(7270, "PocionMana",{ => game.addVisual(new PocionMana())})
-		game.onTick(5350, "Monedas", { => game.addVisual(new Monedas())})
-		game.onTick(3128, "VesselPocion", { => game.addVisual(new VesselMana())})
-		game.onTick(4275, "VesselSalud", { => game.addVisual(new VesselSalud())})
-		game.onTick(5700, "PocionSalud", { => game.addVisual(new PocionSalud())})
+		game.onTick(7000, "PocionesMana",{ => game.addVisual(new PocionMana())})
+		game.onTick(8000, "Monedas", { => game.addVisual(new Monedas())})
+		game.onTick(3000, "VesselPocion", { => game.addVisual(new VesselMana())})
+		game.onTick(6000, "PocionSalud", { => game.addVisual(new PocionSalud())})
 	}
 	
 	method aparecerSalida() {

@@ -8,6 +8,7 @@ object nivelBloques {
     //se crea el prota
 	const prota1 = new Protagonista()
 	
+	var property powerUpsEnNivel = 0
 	const property soundtrack = new Sound(file = "danzamacabra.mp3")
 	const property inicioJuego = new Fondo(image = "Bienvenidos.png")
     // se crean los fragmentos
@@ -86,7 +87,7 @@ object nivelBloques {
 		
 		keyboard.f().onPressDo({prota1.interactuar()})
 		
-		keyboard.enter().onPressDo({self.reproducir() self.generarPowerUpsEnJuego() self.configurarMovimientoTeclado() game.removeVisual(inicioJuego)})
+		keyboard.enter().onPressDo({self.reproducir() self.corroborarCantidadPowerUps() self.configurarMovimientoTeclado() game.removeVisual(inicioJuego)})
 
 	}
 	
@@ -113,8 +114,22 @@ object nivelBloques {
 		})
 	}
 	
+	method corroborarCantidadPowerUps() {
+		if (self.powerUpsEnNivel() > 10) {
+			self.detenerGeneracionDePowerUps() 
+		} else {
+			self.generarPowerUpsEnJuego()
+		}
+	}
+	
+	method detenerGeneracionDePowerUps() {
+		game.removeTickEvent("Monedas")
+		game.removeTickEvent("VesselPocion")
+		game.removeTickEvent("PocionMana")
+	}
+	
 	method generarPowerUpsEnJuego() {
-		game.onTick(7000, "Pociones",{ => game.addVisual(new PocionMana())})
+		game.onTick(7000, "PocionMana",{ => game.addVisual(new PocionMana())})
 		game.onTick(5000, "Monedas", { => game.addVisual(new Monedas())})
 		game.onTick(3000, "VesselPocion", { => game.addVisual(new VesselMana())})
 	}
@@ -132,13 +147,6 @@ object nivelBloques {
 		soundtrack.stop()
 	}
 	
-	/* 
-	method reiniciar(){
-		game.clear()
-		self.configurate()
-	}
-	* 
-	*/
 	
 	method verificaFinDeNivel() {
 		if (prota1.energia() <= 0 or prota1.salud() <= 0){

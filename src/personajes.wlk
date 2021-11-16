@@ -65,21 +65,17 @@ class Protagonista {
 		const espada = new Espada(position = direccion.siguiente(position), direccion = self.direccion())
 		var celdas = 0
 		
+		game.addVisual(espada)
+		
 		game.onTick(400, "lanzamientoEspada", {
 			espada.avanzar(self)
 			celdas += 1
 			if (celdas == 3) {
 				game.removeVisual(espada)
 			}
-			
 		})
 		
-		game.addVisual(espada)
-		
-		game.onCollideDo(espada, {
-			e => espada.daniar(e)
-			game.removeVisual(espada)
-		})
+		game.onCollideDo(espada, {e => espada.daniar(e) game.removeVisual(espada)})
 	}
 
 	method recibirDanio() {
