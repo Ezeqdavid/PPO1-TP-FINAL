@@ -1,5 +1,4 @@
 import wollok.game.*
-import fondo.*
 import personajes.*
 import utilidades.*
 import elementos.*
@@ -24,31 +23,23 @@ object nivelMonedas {
 		// fondo - es importante que sea el primer visual que se agregue
 		game.addVisual(new Fondo(image = "fondoCompleto.png"))
 		
-		/*
-		game.addVisual(new Cofre(position = utilidadesParaJuego.posicionArbitraria()))
-		game.addVisual(new Cofre(position = utilidadesParaJuego.posicionArbitraria()))
-		game.addVisual(new Cofre(position = utilidadesParaJuego.posicionArbitraria()))
-		game.addVisual(new Cofre(position = utilidadesParaJuego.posicionArbitraria()))
-		game.addVisual(new Cofre(position = utilidadesParaJuego.posicionArbitraria()))
-		game.addVisual(new Cofre(position = utilidadesParaJuego.posicionArbitraria()))
-		 */
+		
+		//cofres decorando
+		game.addVisual(new Cofre())
+		game.addVisual(new Cofre())
+		game.addVisual(new Cofre())
+		game.addVisual(new Cofre())
+		game.addVisual(new Cofre())
+		game.addVisual(new Cofre())
+		
 
 		//se crean y se agregan las celdas
-		game.addVisual(new CeldaQuitaEnergia(position = utilidadesParaJuego.posicionArbitraria()))
-		game.addVisual(new CeldaAgregaEnergia(position = utilidadesParaJuego.posicionArbitraria()))
-		game.addVisual(new CeldaTeletransportadora(position = utilidadesParaJuego.posicionArbitraria()))
-		
-
-		//se crean y se agregan las pociones
-		game.addVisual(new VesselMana(position = utilidadesParaJuego.posicionArbitraria()))
-		game.addVisual(new PocionMana(position = utilidadesParaJuego.posicionArbitraria()))
-		game.addVisual(new PocionMana(position = utilidadesParaJuego.posicionArbitraria()))
-		
-		//salud
-		game.addVisual(new PocionSalud(position = utilidadesParaJuego.posicionArbitraria()))
-		game.addVisual(new PocionSalud(position = utilidadesParaJuego.posicionArbitraria()))
-		game.addVisual(new VesselSalud(position = utilidadesParaJuego.posicionArbitraria()))
-		game.addVisual(new VesselSalud(position = utilidadesParaJuego.posicionArbitraria()))
+		game.addVisual(new CeldaQuitaEnergia())
+		game.addVisual(new CeldaAgregaEnergia())
+		game.addVisual(new CeldaTeletransportadora())
+		game.addVisual(new CeldaAgregaEnergia())
+		game.addVisual(new CeldaTeletransportadora())
+		game.addVisual(new CeldaTeletransportadora())
 		
 		//se crean y se agregan monedas Sanguinarias
 		game.addVisual(new MonedaSanguinaria())
@@ -75,7 +66,7 @@ object nivelMonedas {
 		
 		keyboard.space().onPressDo({game.say(personajeSimple, personajeSimple.informarEstado())})
 		
-		keyboard.x().onPressDo({personajeSimple.interactuar()})
+		keyboard.f().onPressDo({personajeSimple.interactuar()})
 		
         // otros 
         
@@ -131,6 +122,9 @@ object nivelMonedas {
 		if (personajeSimple.energia() <= 0 or personajeSimple.salud() <= 0) {
 			self.perder()
 		} else if (personajeSimple.position() == puertaSalida.position() and game.hasVisual(puertaSalida)) {
+			const sound = new Sound(file = "logro.mp3")
+			sound.volume(0.7)
+			sound.play()
 			self.ganar()
 		}
 	}

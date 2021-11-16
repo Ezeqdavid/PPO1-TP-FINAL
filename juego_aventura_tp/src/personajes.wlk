@@ -52,16 +52,27 @@ class Protagonista {
 		position = direccion.opuesto().siguiente(position)
 	}
 
-	method accionar(elemento) {
-		elemento.reaccionar(self)
-	// self.retroceder()
+	method accionar(cosa) {
+		if(cosa.esEnemigo()) {
+			cosa.daniar(self)
+		} else {
+			cosa.reaccionar(self)
+		}
 	}
 	
 
 	method lanzarEspada(){
 		const espada = new Espada(position = direccion.siguiente(position), direccion = self.direccion())
+		var celdas = 0
 		
-		game.onTick(600, "lanzamientoEspada", {espada.avanzar(self)})
+		game.onTick(400, "lanzamientoEspada", {
+			espada.avanzar(self)
+			celdas += 1
+			if (celdas == 3) {
+				game.removeVisual(espada)
+			}
+			
+		})
 		
 		game.addVisual(espada)
 		
@@ -71,10 +82,10 @@ class Protagonista {
 		})
 	}
 
-	
-	method direccion() = direccion
-
 	method recibirDanio() {
+		const sound = new Sound(file = "hit.mp3")
+		sound.volume(0.7)
+		sound.play()
 		self.retroceder()
 		self.salud(self.salud() - 20)
 	}
@@ -100,6 +111,8 @@ class Protagonista {
 	}
 	
 	method esMovible() = false
+	method esEnemigo() = false
+	method hayAlgo() = true
 	
 	method dejarFragmentos(){
 		fragmentos.clear()

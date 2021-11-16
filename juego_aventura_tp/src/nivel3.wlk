@@ -1,30 +1,24 @@
 import wollok.game.*
-import fondo.*
 import personajes.*
 import utilidades.*
 import elementos.*
 import enemigos.*
 import nivel2.*
+import nivel1.*
 
 object nivelConEnemigos {
 	
+	const instructivoNivel3 = new Fondo(image = "InstructivoNivel3.png")
+	
     //se crea el prota
-	const protaNivel3 = new Protagonista(position= game.at(1,1), salud = 3000 ,energia = 500, image = "prota_nivel3.png")
+	const protaNivel3 = new Protagonista(position= game.at(0,1), salud = 3000 ,energia = 500, image = "prota_nivel3.png")
 	 
 	//se crean los enemigos
-	const orco4 = new Orco()
-	const orco5 = new Orco()
-	const orco6 = new Orco()
 	
 	var property monedasEnNivel = 0
   
-	const orco1 = new Orco(image = "ogre_idle_anim_f0.png", salud = 10)
-	//const orco2 = new Orco(position = utilidadesParaJuego.posicionArbitraria(), image = "ogre_idle_anim_f0.png", salud=)
-	const goblin1 = new Goblin(image = "goblin_idle_anim_f0.png", salud = 10 )
-	
-	var property enemigosEnNivel = []
+  	var property enemigosEnNivel = []
 
-	
 	const property soundtrack = new Sound(file = "chopin_preludio4.mp3")
 	
 	//se crean los indicadores
@@ -34,23 +28,22 @@ object nivelConEnemigos {
 	method configurate() {
 		game.addVisual(new Fondo())
 		
-
+		//cofres decorando
+	
+		game.addVisual(new Cofre())
+		game.addVisual(new Cofre())
+		game.addVisual(new Cofre())
+		game.addVisual(new Cofre())
+		game.addVisual(new Cofre())
+		game.addVisual(new Cofre())
+	
 		//se crean y se agregan las celdas
 		game.addVisual(new CeldaQuitaEnergia())
 		game.addVisual(new CeldaAgregaEnergia())
 		game.addVisual(new CeldaTeletransportadora())
-		
-
-		//se crean y se agregan las pociones de mana 
-		game.addVisual(new VesselMana())
-		game.addVisual(new PocionMana())
-		game.addVisual(new PocionMana())
-		
-		//se crean y se agregan las pociones de salud
-		game.addVisual(new PocionSalud())
-		game.addVisual(new PocionSalud())
-		game.addVisual(new VesselSalud())
-		game.addVisual(new VesselSalud())
+		game.addVisual(new CeldaAgregaEnergia())
+		game.addVisual(new CeldaTeletransportadora())
+		game.addVisual(new CeldaTeletransportadora())
 		
 		//se crean y se agregan monedas Sanguinarias
 		game.addVisual(new MonedaSanguinaria())
@@ -62,30 +55,44 @@ object nivelConEnemigos {
 		game.addVisual(salud)
 		
 		//se agregan los enemigos
-		game.addVisual(orco1)
-
-		//game.addVisual(orco4)
-		//game.addVisual(orco5)
-		//game.addVisual(orco2)
-		game.addVisual(goblin1)
-		
-	   self.enemigosEnNivel().addAll([orco1,goblin1])
+		game.addVisual(new Orco())
+		game.addVisual(new Orco())
+		game.addVisual(new Orco())
+		game.addVisual(new Orco())
+		game.addVisual(new Goblin())
+		game.addVisual(new Goblin())
 		
         //se agrega el prota 
 		game.addVisual(protaNivel3)
 		
+		game.addVisual(instructivoNivel3)
+		
 		// teclado
 		keyboard.i().onPressDo({game.allVisuals().forEach({o => game.say(o, o.toString())})})
 		
+		keyboard.q().onPressDo({game.say(self, self.enemigosEnNivel().size().toString())})
+		
 		keyboard.space().onPressDo({game.say(protaNivel3, protaNivel3.informarEstado())})
 		
-		keyboard.x().onPressDo({protaNivel3.interactuar()})
+		keyboard.f().onPressDo({protaNivel3.interactuar()})
 		
 		keyboard.h().onPressDo({protaNivel3.lanzarEspada()})
 		
-		keyboard.l().onPressDo({self.terminarEventoGoblin() self.terminarEventoOrco()})
-			
-		//movimiento
+		keyboard.l().onPressDo({self.desactivarEnemigos()})
+
+        //otros
+		keyboard.g().onPressDo({self.ganar()})
+		
+		keyboard.any().onPressDo({self.aparecerSalida() self.verificaFinDeNivel()})
+		
+		keyboard.enter().onPressDo({self.configurarMovimientoTeclado() self.activarEnemigos() self.generarPowerUpsEnJuego() self.reproducir() game.removeVisual(instructivoNivel3)})
+		
+		//colisiones.
+	   game.onCollideDo(protaNivel3, {o => protaNivel3.accionar(o)})
+	    
+	}
+	
+	method configurarMovimientoTeclado() {
 		keyboard.up().onPressDo({ protaNivel3.moverArriba()
 			protaNivel3.gastarEnergia() energia.visualizar(protaNivel3) salud.visualizar(protaNivel3) 
 		})
@@ -98,23 +105,9 @@ object nivelConEnemigos {
 		keyboard.left().onPressDo({ protaNivel3.moverIzquierda()
 			protaNivel3.gastarEnergia() energia.visualizar(protaNivel3) salud.visualizar(protaNivel3) 
 		})
-			
-        //otros
-		keyboard.g().onPressDo({ self.ganar()})
-		
-		keyboard.any().onPressDo({self.reproducir() self.aparecerSalida() self.verificaFinDeNivel()})
-
-		
-		//colisiones.
-	    game.onCollideDo(protaNivel3, {o => protaNivel3.accionar(o)})
-	    game.whenCollideDo(orco1, {p => orco1.daniar(protaNivel3)})
-	    
-	    //evento enemigos
-	    
-	    game.onTick(2800, "movimientoOrco", {orco1.acercarseA(protaNivel3)})
-	    game.onTick(2800, "movimientoGoblin", {goblin1.acercarseA(protaNivel3)})
 	}
-	
+
+ 
 	method reproducir() {
 		if (!self.soundtrack().played()) {
 			self.soundtrack().shouldLoop(true)
@@ -123,6 +116,13 @@ object nivelConEnemigos {
 		}
 	}
 	
+	
+	method generarPowerUpsEnJuego() {
+		game.onTick(7000, "Pociones",{ => game.addVisual(new PocionMana())})
+		game.onTick(5000, "Monedas", { => game.addVisual(new Monedas())})
+		game.onTick(3000, "VesselPocion", { => game.addVisual(new VesselMana())})
+	}
+
 	method aparecerSalida() {
 		if (self.condicionDeNivel() and !game.hasVisual(puertaSalida)) {
 			game.addVisual(puertaSalida)	
@@ -141,18 +141,19 @@ object nivelConEnemigos {
 	
 	method todosEnemigosMuertos() = enemigosEnNivel.all({e => e.salud() <= 0})
 	
-	method terminarEventoOrco(){
-		game.removeTickEvent("movimientoOrco")
+	method activarEnemigos() {
+		game.onTick(2800, "activarEnemigos", {game.allVisuals().filter{v => v.esEnemigo()}.forEach{e => e.acercarseA(protaNivel3)}})
 	}
-	method terminarEventoGoblin(){
-		game.removeTickEvent("movimientoGoblin")
+	
+	method desactivarEnemigos(){
+		game.removeTickEvent("activarEnemigos")
 	}
 
 	
 	method perder() {
 		game.clear()
 				
-		//game.clear()
+		game.clear()
 		
 		game.addVisual(new Fondo(image = "fondoCompleto.png"))
 		
@@ -170,7 +171,7 @@ object nivelConEnemigos {
 		// el perder() también va a ser parecido
 		// game.clear() limpia visuals, teclado, colisiones y acciones
 		game.clear()
-		soundtrack.stop()
+		//soundtrack.stop()
 			// después puedo volver a agregar el fondo, y algún visual para que no quede tan pelado
 		game.addVisual(new Fondo(image = "fondoCompleto.png"))
 			// después de un ratito ...

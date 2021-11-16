@@ -1,6 +1,4 @@
 import wollok.game.*
-
-import fondo.*
 import personajes.*
 import elementos.*
 import nivel2.*
@@ -13,35 +11,42 @@ object nivelBloques {
 	const property soundtrack = new Sound(file = "danzamacabra.mp3")
 	const property inicioJuego = new Fondo(image = "Bienvenidos.png")
     // se crean los fragmentos
-	const fragmento1 = new FragmentoEspada(position = utilidadesParaJuego.posicionArbitraria(), image = "Fragment_1_golden_sword.png")
-	const fragmento2 = new FragmentoEspada(position = utilidadesParaJuego.posicionArbitraria(), image = "Fragment_2_golden_sword.png")
-	const fragmento3 = new FragmentoEspada(position = utilidadesParaJuego.posicionArbitraria(), image ="Broken_golden_sword.png" )
-	const fragmento4 = new FragmentoEspada(position = utilidadesParaJuego.posicionArbitraria(), image = "Gem_golden_sword.png")
+	const fragmento1 = new FragmentoEspada(image = "Fragment_1_golden_sword.png")
+	const fragmento2 = new FragmentoEspada(image = "Fragment_2_golden_sword.png")
+	const fragmento3 = new FragmentoEspada(image ="Broken_golden_sword.png" )
+	const fragmento4 = new FragmentoEspada(image = "Gem_golden_sword.png")
 	
 	
 	//se crean los indicadores
-	const energiaIndicador = new IndicadorEnergia(position = game.at(1,0))
-	const salud = new IndicadorSalud(position = game.at(0,0))
+	const energiaIndicador = new IndicadorEnergia()
+	const salud = new IndicadorSalud()
 
 	method configurate() {
 		
 		// fondo - es importante que sea el primer visual que se agregue
-		game.addVisual(new Fondo(image = "fondoCompleto.png"))
+		game.addVisual(new Fondo())
 		
 		//forja
 		game.addVisual(forja)
 		
 		//celdas
-		game.addVisual(new CeldaQuitaEnergia(position = utilidadesParaJuego.posicionArbitraria()))
-		game.addVisual(new CeldaAgregaEnergia(position = utilidadesParaJuego.posicionArbitraria()))
-		game.addVisual(new CeldaTeletransportadora(position = utilidadesParaJuego.posicionArbitraria()))
+		game.addVisual(new CeldaQuitaEnergia())
+		game.addVisual(new CeldaAgregaEnergia())
+		game.addVisual(new CeldaTeletransportadora())
+		game.addVisual(new CeldaAgregaEnergia())
+		game.addVisual(new CeldaTeletransportadora())
+		game.addVisual(new CeldaTeletransportadora())
 		
 		
 		//escalera y cofres
 		game.addVisual(escalera)
-		game.addVisual(new Cofre(position = utilidadesParaJuego.posicionArbitrariaParaCofres()))
-		game.addVisual(new Cofre(position = utilidadesParaJuego.posicionArbitrariaParaCofres()))
-		game.addVisual(new Cofre(position = utilidadesParaJuego.posicionArbitrariaParaCofres()))
+		game.addVisual(new Cofre())
+		game.addVisual(new Cofre())
+		game.addVisual(new Cofre())
+		game.addVisual(new Cofre())
+		game.addVisual(new Cofre())
+		game.addVisual(new Cofre())
+
 		
 		
 		// fragmentos de espada
@@ -66,7 +71,6 @@ object nivelBloques {
 		// este es para probar, no es necesario dejarlo
 		keyboard.t().onPressDo({ self.terminar()})
 
-		
 		keyboard.i().onPressDo({game.allVisuals().forEach({o => game.say(o, o.toString())})})
 
 		keyboard.space().onPressDo({game.say(prota1, prota1.informarEstado())})
@@ -80,7 +84,7 @@ object nivelBloques {
 		
 		keyboard.space().onPressDo({game.say(prota1, prota1.informarEstado())})
 		
-		keyboard.x().onPressDo({prota1.interactuar()})
+		keyboard.f().onPressDo({prota1.interactuar()})
 		
 		keyboard.enter().onPressDo({self.reproducir() self.generarPowerUpsEnJuego() self.configurarMovimientoTeclado() game.removeVisual(inicioJuego)})
 

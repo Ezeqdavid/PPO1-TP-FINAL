@@ -7,17 +7,33 @@ import nivel1.*
 import nivel2.*
 import nivel3.*
 
-class PowerUp {
+
+
+class Elemento {
+	method recibirDanio() {}
+	method esMovible() = true
+	method esEnemigo() = false
+	method reaccionar(personaje) {}
+	method hayAlgo() = true
+}
+
+class Fondo inherits Elemento{
+
+	const property position = game.at(0, 0)
+	var property image = "fondoCompleto.png"
+	override method hayAlgo() = false
+}
+
+class PowerUp inherits Elemento{
 	var property position = utilidadesParaJuego.posicionArbitraria()
 	var property image = "flask_big_blue.png"
 	
-	method reaccionar(personaje) {
+	override method reaccionar(personaje) {
 		const sound = new Sound(file = "powerUp.mp3")
+		sound.volume(0.7)
 		sound.play()
 		game.removeVisual(self)
 	}
-	method esMovible() {return true}
-	method recibirDanio(){}
 }
 
 class PocionMana inherits PowerUp{
@@ -73,15 +89,12 @@ class MonedaSanguinaria inherits Monedas {
 	}
 }
 
-class Cofre {
+class Cofre inherits Elemento{
 	const property image = "chest_empty_open_anim_f0.png"
 	
 	var property position = utilidadesParaJuego.posicionArbitrariaParaCofres() 
-	
-	method esMovible() {return true}
-	method recibirDanio(){}
 
-	method reaccionar(personaje) {
+	override method reaccionar(personaje) {
 		const sound = new Sound(file = "colisioncaja.mp3")
 		const newPosition = personaje.direccion().siguiente(position)
 		sound.play()
@@ -96,23 +109,22 @@ class Cofre {
 
 }
 
-class FragmentoEspada {
+class FragmentoEspada  inherits Elemento{
 	const property image = "Broken_golden_sword.png"
-	var property position 
-	method reaccionar(personaje) {
+	var property position = utilidadesParaJuego.posicionArbitraria()
+	override method reaccionar(personaje) {
+		const sound = new Sound(file = "logro.mp3")
+		sound.volume(0.7)
+		sound.play()
 		personaje.recogerFragmento(self)
 		game.removeVisual(self)
 	}
-	method esMovible() {return true}
-	method recibirDanio(){}
 }
 
-class CeldaSorpresa {
+class CeldaSorpresa inherits Elemento{
 	const property image = "celdaSorpresa.png"
 	var property position = utilidadesParaJuego.posicionArbitraria()
-	method reaccionar(personaje) {game.removeVisual(self)}
-	method esMovible() {return true} 
-	method recibirDanio(){}
+	override method reaccionar(personaje) {game.removeVisual(self)} 
 }
 
 class CeldaQuitaEnergia inherits CeldaSorpresa {
@@ -136,15 +148,12 @@ class CeldaTeletransportadora inherits CeldaSorpresa {
 	}
 }
 
-class Indicador {
+class Indicador inherits Elemento{
 	var property position
 	var property image = null
-	method reaccionar(personaje) {}
 	method visualizar(personaje)
 
-	method esMovible() = false
-	method recibirDanio(){}
-
+	override method esMovible() = false
 }
 
 class IndicadorSalud inherits Indicador {
@@ -178,29 +187,21 @@ class IndicadorEnergia inherits Indicador {
 	}
 }
 
-
-/* object barraDeIndicadores{
-	var property position = game.at(0,0)
-	var property image = "barra_indicadores.png"
-	
-	method reaccionar(){}
-}
-*/
-object forja {
+object forja inherits Elemento{
 	const property image = "wall_fountain_basin_red_anim_f0.png"
 	const property position = game.at(13,1)
 	var property fragmentos = []
 	var property objetivoLogrado = false
 	
-	method esMovible() {return false}
-	method recibirDanio(){}	
+	override method esMovible() {return false}
 	
-	method reaccionar(personaje) {
+	override method reaccionar(personaje) {
 		const sound = new Sound(file = "logro.mp3")
+		sound.volume(0.7)
 		sound.play()
 		fragmentos.addAll(personaje.fragmentos())
 		personaje.dejarFragmentos()
-		game.say(self, "Juntaste " + fragmentos.size().stringValue() + " fragmentos, ya casi está todo.")
+		game.say(self, "Juntaste " + fragmentos.size().stringValue() + " , ya casi está todo.")
 		if (fragmentos.size() == 4) {
 			self.objetivoLogrado(true)
 		}
@@ -208,21 +209,21 @@ object forja {
 	}
 }
 
-object escalera {
+object escalera inherits Elemento{
 	const property image = "Escalera.png"
 	const property position = game.at(0,13)
 	var property cofresPisoInferior = []
 	var property objetivoLogrado = false
 	
-	method esMovible() {return false}
-	method recibirDanio(){}
+	override method esMovible() {return false}
 	
-	method reaccionar(cofre) {
+	override method reaccionar(cofre) {
 		const sound = new Sound(file = "logro.mp3")
+		sound.volume(0.7)
 		sound.play()
 		cofresPisoInferior.add(cofre)
 		game.removeVisual(cofre)
-		game.say(self, "Bajaste " + cofresPisoInferior.size().stringValue() + " cofres, dale que falta poco.")
+		game.say(self, "Bajaste " + cofresPisoInferior.size().stringValue() + " , dale que falta poco.")
 		if (cofresPisoInferior.size() == 3) {
 			self.objetivoLogrado(true)
 		}
@@ -230,7 +231,7 @@ object escalera {
 	}
 }
 
-class Espada{
+class Espada inherits Elemento{
 	var property position
 	var property image = null
 	var property direccion
@@ -240,13 +241,13 @@ class Espada{
 	} 
 	
 	method spriteCorrecto() {
-		if (self.direccion() == arriba) {
+		if (self.direccion().esArriba()) {
 			self.image("espadaDorada_arriba.png")
-		} else if (self.direccion() == derecha) {
+		} else if (self.direccion().esDerecha()) {
 			self.image("espadaDorada_derecha.png")
-		} else if (self.direccion() == abajo) {
+		} else if (self.direccion().esAbajo()) {
 			self.image("espadaDorada_abajo.png")
-		} else if (self.direccion() == izquierda) {
+		} else if (self.direccion().esIzquierda()) {
 			self.image("espadaDorada_izquierda.png")
 		}
 	}
@@ -255,22 +256,18 @@ class Espada{
 		enemigo.recibirDanio()
 	}
 	
-	method esMovible(){}
-	
 	method avanzar(personaje){
 		position = direccion.siguiente(position)
 	}
 }
 
-object puertaSalida {
+object puertaSalida inherits Elemento{
 	const property image = "door_open.png"
 	const property position = utilidadesParaJuego.posicionArbitraria()
 	
-	method esMovible() = true
-	method reaccionar(personaje) {
+	override method reaccionar(personaje) {
 		nivelMonedas.verificaFinDeNivel()
 	}
-	method recibirDanio(){}
 }
 
 

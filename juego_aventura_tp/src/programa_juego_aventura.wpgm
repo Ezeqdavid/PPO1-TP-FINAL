@@ -3,6 +3,7 @@ import nivel1.*
 import utilidades.*
 import nivel3.*
 import nivel2.*
+import EleccionFinal.*
 
 program juego_aventura {
 	game.title("Oh qué aventura objetosa")
