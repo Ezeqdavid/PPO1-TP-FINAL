@@ -7,10 +7,10 @@ import nivel2.*
 // en la implementación real, conviene tener un personaje por nivel
 // los personajes probablemente tengan un comportamiendo más complejo que solamente
 // imagen y posición
-class Protagonista {
+object protagonista {
 
 	var property position = game.at(0, 1)
-	const property image = "knight_f_idle_anim_f0.png"
+	var property image = "knight_f_idle_anim_f0.png"
 	var property energia = 100
 	var property salud = 200
 	var property dinero = 0
@@ -66,6 +66,7 @@ class Protagonista {
 		var celdas = 0
 		
 		game.addVisual(espada)
+		game.onCollideDo(espada, {e => espada.daniar(e) game.removeVisual(espada)})
 		
 		game.onTick(400, "lanzamientoEspada", {
 			espada.avanzar(self)
@@ -74,8 +75,6 @@ class Protagonista {
 				game.removeVisual(espada)
 			}
 		})
-		
-		game.onCollideDo(espada, {e => espada.daniar(e) game.removeVisual(espada)})
 	}
 
 	method recibirDanio() {
@@ -108,7 +107,6 @@ class Protagonista {
 	
 	method esMovible() = false
 	method esEnemigo() = false
-	method hayAlgo() = true
 	
 	method dejarFragmentos(){
 		fragmentos.clear()

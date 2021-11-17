@@ -8,7 +8,6 @@ import nivel2.*
 import nivel3.*
 
 
-
 class Elemento {
 	method recibirDanio() {}
 	method esMovible() = true
@@ -38,6 +37,9 @@ class PowerUp inherits Elemento{
 		const sound = new Sound(file = "powerUp.mp3")
 		sound.volume(0.7)
 		sound.play()
+		nivelBloques.powerUpsEnNivel(nivelBloques.powerUpsEnNivel() - 1) 
+		nivelConEnemigos.powerUpsEnNivel(nivelConEnemigos.powerUpsEnNivel() - 1) 
+		nivelMonedas.powerUpsEnNivel(nivelMonedas.powerUpsEnNivel() - 1)
 		game.removeVisual(self)
 	}
 }

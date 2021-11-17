@@ -4,14 +4,13 @@ import utilidades.*
 import elementos.*
 import nivel3.*
 import EleccionFinal.*
+import nivel1.*
 
 object nivelMonedas {
 	
-    //se crea el prota
-	const personajeSimple = new Protagonista(salud = 30)
-	
 	var property monedasEnNivel = 0
 	var property powerUpsEnNivel = 0
+	var powerUpsEncendidos = false
 	const property soundtrack = new Sound(file = "chopin_preludio4.mp3")
 	const instructivoNivel2 = new Fondo(image = "InstructivoNivel2.png")
 	
@@ -57,16 +56,16 @@ object nivelMonedas {
 		game.addVisual(salud)
 		
         //se agrega el prota 
-		game.addVisual(personajeSimple)
+		game.addVisual(protagonista)
 		
 		game.addVisual(instructivoNivel2)
 		// teclado
 		
 		keyboard.i().onPressDo({game.allVisuals().forEach({o => game.say(o, o.toString())})})
 		
-		keyboard.space().onPressDo({game.say(personajeSimple, personajeSimple.informarEstado())})
+		keyboard.space().onPressDo({game.say(protagonista, protagonista.informarEstado())})
 		
-		keyboard.f().onPressDo({personajeSimple.interactuar()})
+		keyboard.f().onPressDo({protagonista.interactuar()})
 		
         // otros 
         
@@ -76,7 +75,7 @@ object nivelMonedas {
 		keyboard.any().onPressDo({self.aparecerSalida() self.verificaFinDeNivel()})
 		
 		//colisiones.
-	    game.onCollideDo(personajeSimple, {o => personajeSimple.accionar(o)})
+	    game.onCollideDo(protagonista, {o => protagonista.accionar(o)})
 	}
 	
 	method reproducir() {
@@ -88,34 +87,41 @@ object nivelMonedas {
 	}
 	
 	method configurarMovimientoTeclado() {
-		keyboard.up().onPressDo({ personajeSimple.moverArriba()
-			personajeSimple.gastarEnergia() energia.visualizar(personajeSimple) salud.visualizar(personajeSimple) 
+		keyboard.up().onPressDo({ protagonista.moverArriba()
+			protagonista.gastarEnergia() energia.visualizar(protagonista) salud.visualizar(protagonista) 
 		})
-		keyboard.down().onPressDo({ personajeSimple.moverAbajo()
-			personajeSimple.gastarEnergia() energia.visualizar(personajeSimple) salud.visualizar(personajeSimple) 
+		keyboard.down().onPressDo({ protagonista.moverAbajo()
+			protagonista.gastarEnergia() energia.visualizar(protagonista) salud.visualizar(protagonista) 
 		})
-		keyboard.right().onPressDo({ personajeSimple.moverDerecha()
-			personajeSimple.gastarEnergia() energia.visualizar(personajeSimple) salud.visualizar(personajeSimple) 
+		keyboard.right().onPressDo({ protagonista.moverDerecha()
+			protagonista.gastarEnergia() energia.visualizar(protagonista) salud.visualizar(protagonista) 
 		})
-		keyboard.left().onPressDo({ personajeSimple.moverIzquierda()
-			personajeSimple.gastarEnergia() energia.visualizar(personajeSimple) salud.visualizar(personajeSimple) 
+		keyboard.left().onPressDo({ protagonista.moverIzquierda()
+			protagonista.gastarEnergia() energia.visualizar(protagonista) salud.visualizar(protagonista) 
 		})
 	}
 	
 	method corroborarCantidadPowerUps() {
-		if (self.powerUpsEnNivel() > 15) {
+		game.onTick(8000, "cantidadPowerUps", { => self.detenerEIniciarPowerUps()})
+	}
+	
+	method detenerEIniciarPowerUps() {
+		if (self.powerUpsEnNivel() > 15 and powerUpsEncendidos) {
 			self.detenerGeneracionDePowerUps() 
-		} else {
+		} else if (!powerUpsEncendidos) {
 			self.generarPowerUpsEnJuego()
 		}
 	}
 	
 	method detenerGeneracionDePowerUps() {
+		powerUpsEncendidos = false
+		game.removeTickEvent("PocionSalud")
 		game.removeTickEvent("Monedas")
 		game.removeTickEvent("VesselPocion")
 		game.removeTickEvent("PocionMana")
 	}
 	method generarPowerUpsEnJuego() {
+		powerUpsEncendidos = true
 		game.onTick(7000, "PocionesMana",{ => game.addVisual(new PocionMana())})
 		game.onTick(8000, "Monedas", { => game.addVisual(new Monedas())})
 		game.onTick(3000, "VesselPocion", { => game.addVisual(new VesselMana())})
@@ -128,12 +134,12 @@ object nivelMonedas {
 		}
 	}
 	
-	method condicionDeNivel() {return self.monedasEnNivel() == 0 and personajeSimple.energia() > 0}
+	method condicionDeNivel() {return self.monedasEnNivel() == 0 and protagonista.energia() > 0}
 	
 	method verificaFinDeNivel() {
-		if (personajeSimple.energia() <= 0 or personajeSimple.salud() <= 0) {
+		if (protagonista.energia() <= 0 or protagonista.salud() <= 0) {
 			self.perder()
-		} else if (personajeSimple.position() == puertaSalida.position() and game.hasVisual(puertaSalida)) {
+		} else if (protagonista.position() == puertaSalida.position() and game.hasVisual(puertaSalida)) {
 			const sound = new Sound(file = "logro.mp3")
 			sound.volume(0.7)
 			sound.play()
@@ -141,14 +147,24 @@ object nivelMonedas {
 		}
 	}
 	
+	method detenerTodosLosEventos() {
+		game.removeTickEvent("Monedas")
+		game.removeTickEvent("VesselPocion")
+		game.removeTickEvent("PocionMana")
+		game.removeTickEvent("PocionSalud")
+		game.removeTickEvent("cantidadPowerUps")
+	}
+	
 	method perder() {
 		game.clear()
-				
-		//game.clear()
+		try {
+			self.detenerGeneracionDePowerUps()
+		} catch e {
+		}
 		
 		game.addVisual(new Fondo(image = "fondoCompleto.png"))
 		
-		game.addVisual(personajeSimple)
+		game.addVisual(protagonista)
 		
 		game.schedule(3500, {game.clear()})
 		
@@ -162,6 +178,10 @@ object nivelMonedas {
 		// el perder() también va a ser parecido
 		// game.clear() limpia visuals, teclado, colisiones y acciones
 		game.clear()
+		try {
+			self.detenerGeneracionDePowerUps()
+		} catch e {
+		}
 		soundtrack.stop()
 			// después puedo volver a agregar el fondo, y algún visual para que no quede tan pelado
 		game.addVisual(new Fondo(image = "fondoCompleto.png"))

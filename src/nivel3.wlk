@@ -9,14 +9,12 @@ import nivel1.*
 object nivelConEnemigos {
 	
 	const instructivoNivel3 = new Fondo(image = "InstructivoNivel3.png")
-	
-    //se crea el prota
-	const protaNivel3 = new Protagonista(position= game.at(0,1), salud = 3000 ,energia = 500, image = "prota_nivel3.png")
 	 
 	//se crean los enemigos
 	
 	var property monedasEnNivel = 0
   	var property powerUpsEnNivel = 0
+  	var powerUpsEncendidos = false
   	var property enemigosEnNivel = []
 
 	const property soundtrack = new Sound(file = "chopin_preludio4.mp3")
@@ -26,6 +24,13 @@ object nivelConEnemigos {
 	const salud = new IndicadorSalud()
 
 	method configurate() {
+		
+		//configurando protagonista
+		protagonista.position(game.at(0,1))
+		protagonista.salud(protagonista.salud() + 200)
+		protagonista.energia(protagonista.energia() + 200)
+		protagonista.image("prota_nivel3.png")
+		
 		game.addVisual(new Fondo())
 		
 		//cofres decorando
@@ -63,7 +68,7 @@ object nivelConEnemigos {
 		game.addVisual(new Goblin())
 		
         //se agrega el prota 
-		game.addVisual(protaNivel3)
+		game.addVisual(protagonista)
 		
 		game.addVisual(instructivoNivel3)
 		
@@ -72,38 +77,36 @@ object nivelConEnemigos {
 		
 		keyboard.q().onPressDo({game.say(self, self.enemigosEnNivel().size().toString())})
 		
-		keyboard.space().onPressDo({game.say(protaNivel3, protaNivel3.informarEstado())})
+		keyboard.space().onPressDo({game.say(protagonista, protagonista.informarEstado())})
 		
-		keyboard.f().onPressDo({protaNivel3.interactuar()})
+		keyboard.f().onPressDo({protagonista.interactuar()})
 		
-		keyboard.h().onPressDo({protaNivel3.lanzarEspada()})
-		
-		keyboard.l().onPressDo({self.desactivarEnemigos()})
+		keyboard.h().onPressDo({protagonista.lanzarEspada()})
 
         //otros
 		keyboard.g().onPressDo({self.ganar()})
 		
 		keyboard.any().onPressDo({self.aparecerSalida() self.verificaFinDeNivel()})
 		
-		keyboard.enter().onPressDo({game.removeVisual(instructivoNivel3) self.configurarMovimientoTeclado() self.activarEnemigos() self.corroborarCantidadPowerUps() self.reproducir() })
+		keyboard.enter().onPressDo({game.removeVisual(instructivoNivel3) self.corroborarCantidadPowerUps() self.configurarMovimientoTeclado() self.activarEnemigos()  self.reproducir() })
 		
 		//colisiones.
-	   game.onCollideDo(protaNivel3, {o => protaNivel3.accionar(o)})
+	   game.onCollideDo(protagonista, {o => protagonista.accionar(o)})
 	    
 	}
 	
 	method configurarMovimientoTeclado() {
-		keyboard.up().onPressDo({ protaNivel3.moverArriba()
-			protaNivel3.gastarEnergia() energia.visualizar(protaNivel3) salud.visualizar(protaNivel3) 
+		keyboard.up().onPressDo({ protagonista.moverArriba()
+			protagonista.gastarEnergia() energia.visualizar(protagonista) salud.visualizar(protagonista) 
 		})
-		keyboard.down().onPressDo({ protaNivel3.moverAbajo()
-			protaNivel3.gastarEnergia() energia.visualizar(protaNivel3) salud.visualizar(protaNivel3) 
+		keyboard.down().onPressDo({ protagonista.moverAbajo()
+			protagonista.gastarEnergia() energia.visualizar(protagonista) salud.visualizar(protagonista) 
 		})
-		keyboard.right().onPressDo({ protaNivel3.moverDerecha()
-			protaNivel3.gastarEnergia() energia.visualizar(protaNivel3) salud.visualizar(protaNivel3) 
+		keyboard.right().onPressDo({ protagonista.moverDerecha()
+			protagonista.gastarEnergia() energia.visualizar(protagonista) salud.visualizar(protagonista) 
 		})
-		keyboard.left().onPressDo({ protaNivel3.moverIzquierda()
-			protaNivel3.gastarEnergia() energia.visualizar(protaNivel3) salud.visualizar(protaNivel3) 
+		keyboard.left().onPressDo({ protagonista.moverIzquierda()
+			protagonista.gastarEnergia() energia.visualizar(protagonista) salud.visualizar(protagonista) 
 		})
 	}
 
@@ -117,19 +120,26 @@ object nivelConEnemigos {
 	}
 	
 	method corroborarCantidadPowerUps() {
-		if (self.powerUpsEnNivel() > 15) {
+		game.onTick(8000, "cantidadPowerUps", { => self.detenerEIniciarPowerUps()})
+	}
+	
+	method detenerEIniciarPowerUps() {
+		if (self.powerUpsEnNivel() > 15 and powerUpsEncendidos) {
 			self.detenerGeneracionDePowerUps() 
-		} else {
+		} else if (!powerUpsEncendidos) {
 			self.generarPowerUpsEnJuego()
 		}
 	}
 	
 	method detenerGeneracionDePowerUps() {
+		powerUpsEncendidos = false
+		game.removeTickEvent("PocionSalud")
 		game.removeTickEvent("Monedas")
 		game.removeTickEvent("VesselPocion")
 		game.removeTickEvent("PocionMana")
 	}
 	method generarPowerUpsEnJuego() {
+		powerUpsEncendidos = true
 		game.onTick(7000, "PocionesMana",{ => game.addVisual(new PocionMana())})
 		game.onTick(8000, "Monedas", { => game.addVisual(new Monedas())})
 		game.onTick(3000, "VesselPocion", { => game.addVisual(new VesselMana())})
@@ -142,12 +152,12 @@ object nivelConEnemigos {
 		}
 	}
 	
-	method condicionDeNivel() {return self.todosEnemigosMuertos() and protaNivel3.energia() > 0 and protaNivel3.salud() > 0}
+	method condicionDeNivel() {return self.todosEnemigosMuertos() and protagonista.energia() > 0 and protagonista.salud() > 0}
 	
 	method verificaFinDeNivel() {
-		if (protaNivel3.energia() <= 0 or protaNivel3.salud() <= 0) {
+		if (protagonista.energia() <= 0 or protagonista.salud() <= 0) {
 			self.perder()
-		} else if (protaNivel3.position() == puertaSalida.position() and game.hasVisual(puertaSalida)) {
+		} else if (protagonista.position() == puertaSalida.position() and game.hasVisual(puertaSalida)) {
 			self.ganar()
 		}
 	}
@@ -155,22 +165,29 @@ object nivelConEnemigos {
 	method todosEnemigosMuertos() = enemigosEnNivel.all({e => e.salud() <= 0})
 	
 	method activarEnemigos() {
-		game.onTick(2800, "activarEnemigos", {game.allVisuals().filter{v => v.esEnemigo()}.forEach{e => e.acercarseA(protaNivel3)}})
+		game.onTick(2800, "activarEnemigos", {game.allVisuals().filter{v => v.esEnemigo()}.forEach{e => e.acercarseA(protagonista)}})
 	}
 	
-	method desactivarEnemigos(){
+	method detenerTodosLosEventos() {
+		game.removeTickEvent("Monedas")
+		game.removeTickEvent("VesselPocion")
+		game.removeTickEvent("PocionMana")
+		game.removeTickEvent("PocionSalud")
+		game.removeTickEvent("cantidadPowerUps")
 		game.removeTickEvent("activarEnemigos")
 	}
-
 	
 	method perder() {
 		game.clear()
-				
-		game.clear()
 		
+		try {
+			self.detenerGeneracionDePowerUps()
+		} catch e {
+		}
+				
 		game.addVisual(new Fondo(image = "fondoCompleto.png"))
 		
-		game.addVisual(protaNivel3)
+		game.addVisual(protagonista)
 		
 		game.schedule(3500, {game.clear()})
 		
@@ -184,6 +201,10 @@ object nivelConEnemigos {
 		// el perder() también va a ser parecido
 		// game.clear() limpia visuals, teclado, colisiones y acciones
 		game.clear()
+		try {
+			self.detenerGeneracionDePowerUps()
+		} catch e {
+		}
 		soundtrack.stop()
 			// después puedo volver a agregar el fondo, y algún visual para que no quede tan pelado
 		game.addVisual(new Fondo(image = "fondoCompleto.png"))

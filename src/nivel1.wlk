@@ -5,10 +5,9 @@ import nivel2.*
 import utilidades.*
 
 object nivelBloques {
-    //se crea el prota
-	const prota1 = new Protagonista()
 	
 	var property powerUpsEnNivel = 0
+	var powerUpsEncendidos = false
 	const property soundtrack = new Sound(file = "danzamacabra.mp3")
 	const property inicioJuego = new Fondo(image = "Bienvenidos.png")
     // se crean los fragmentos
@@ -62,9 +61,9 @@ object nivelBloques {
 		game.addVisual(salud)
 			
 		//prota
-		game.addVisual(prota1)
+		game.addVisual(protagonista)
 		
-		game.onCollideDo(prota1, {o => prota1.accionar(o)})
+		game.onCollideDo(protagonista, {o => protagonista.accionar(o)})
 		game.onCollideDo(escalera, {cofre => escalera.reaccionar(cofre)})
 		
 		game.addVisual(inicioJuego)
@@ -73,19 +72,15 @@ object nivelBloques {
 		keyboard.t().onPressDo({ self.terminar()})
 
 		keyboard.i().onPressDo({game.allVisuals().forEach({o => game.say(o, o.toString())})})
+		
+		keyboard.q().onPressDo({game.say(protagonista,"PowerUps: " + self.powerUpsEnNivel().toString())})
+		
+		keyboard.space().onPressDo({game.say(protagonista, protagonista.informarEstado())})
 
-		keyboard.space().onPressDo({game.say(prota1, prota1.informarEstado())})
-
-		keyboard.x().onPressDo({prota1.interactuar()})
+		keyboard.x().onPressDo({protagonista.interactuar()})
 			
 		// teclado movimiento:
-		keyboard.i().onPressDo({game.allVisuals().forEach({o => game.say(o, o.toString())})})
-		
-		keyboard.p().onPressDo({self.configurate()})
-		
-		keyboard.space().onPressDo({game.say(prota1, prota1.informarEstado())})
-		
-		keyboard.f().onPressDo({prota1.interactuar()})
+		keyboard.f().onPressDo({protagonista.interactuar()})
 		
 		keyboard.enter().onPressDo({self.reproducir() self.corroborarCantidadPowerUps() self.configurarMovimientoTeclado() game.removeVisual(inicioJuego)})
 
@@ -100,35 +95,41 @@ object nivelBloques {
 	}
 	
 	method configurarMovimientoTeclado() {
-		keyboard.up().onPressDo({ prota1.moverArriba()
-			prota1.gastarEnergia() self.verificaFinDeNivel() energiaIndicador.visualizar(prota1)
+		keyboard.up().onPressDo({ protagonista.moverArriba()
+			protagonista.gastarEnergia() self.verificaFinDeNivel() energiaIndicador.visualizar(protagonista)
 		})
-		keyboard.down().onPressDo({ prota1.moverAbajo()
-			prota1.gastarEnergia() self.verificaFinDeNivel() energiaIndicador.visualizar(prota1)
+		keyboard.down().onPressDo({ protagonista.moverAbajo()
+			protagonista.gastarEnergia() self.verificaFinDeNivel() energiaIndicador.visualizar(protagonista)
 		})
-		keyboard.right().onPressDo({ prota1.moverDerecha()
-			prota1.gastarEnergia() self.verificaFinDeNivel() energiaIndicador.visualizar(prota1)
+		keyboard.right().onPressDo({ protagonista.moverDerecha()
+			protagonista.gastarEnergia() self.verificaFinDeNivel() energiaIndicador.visualizar(protagonista)
 		})
-		keyboard.left().onPressDo({ prota1.moverIzquierda()
-			prota1.gastarEnergia() self.verificaFinDeNivel() energiaIndicador.visualizar(prota1)
+		keyboard.left().onPressDo({ protagonista.moverIzquierda()
+			protagonista.gastarEnergia() self.verificaFinDeNivel() energiaIndicador.visualizar(protagonista)
 		})
 	}
 	
 	method corroborarCantidadPowerUps() {
-		if (self.powerUpsEnNivel() > 10) {
+		game.onTick(8000, "cantidadPowerUps", { => self.detenerEIniciarPowerUps()})
+	}
+	
+	method detenerEIniciarPowerUps() {
+		if (self.powerUpsEnNivel() > 15 and powerUpsEncendidos) {
 			self.detenerGeneracionDePowerUps() 
-		} else {
+		} else if (!powerUpsEncendidos) {
 			self.generarPowerUpsEnJuego()
 		}
 	}
 	
 	method detenerGeneracionDePowerUps() {
+		powerUpsEncendidos = false
 		game.removeTickEvent("Monedas")
 		game.removeTickEvent("VesselPocion")
 		game.removeTickEvent("PocionMana")
 	}
 	
 	method generarPowerUpsEnJuego() {
+		powerUpsEncendidos = true
 		game.onTick(7000, "PocionMana",{ => game.addVisual(new PocionMana())})
 		game.onTick(5000, "Monedas", { => game.addVisual(new Monedas())})
 		game.onTick(3000, "VesselPocion", { => game.addVisual(new VesselMana())})
@@ -137,10 +138,15 @@ object nivelBloques {
 	method perder() {
 		
 		game.clear()
+		try {
+			self.detenerGeneracionDePowerUps()
+		} catch e {
+		}
+		
 		
 		game.addVisual(new Fondo(image = "fondoCompleto.png"))
 		
-		game.addVisual(prota1)
+		game.addVisual(protagonista)
 		
 		game.addVisual(new Fondo(image = "Pantalla-GameOver.png" ))
 		
@@ -149,7 +155,7 @@ object nivelBloques {
 	
 	
 	method verificaFinDeNivel() {
-		if (prota1.energia() <= 0 or prota1.salud() <= 0){
+		if (protagonista.energia() <= 0 or protagonista.salud() <= 0){
 			self.perder()
 		}
 		else if (forja.objetivoLogrado() and escalera.objetivoLogrado()) {
@@ -160,10 +166,14 @@ object nivelBloques {
 	method terminar() {
 		// game.clear() limpia visuals, teclado, colisiones y acciones
 		game.clear()
+		try {
+			self.detenerGeneracionDePowerUps()
+		} catch e {
+		}
 		soundtrack.stop()
 			// después puedo volver a agregar el fondo, y algún visual para que no quede tan pelado
 		game.addVisual(new Fondo(image = "fondoCompleto.png"))
-		game.addVisual(prota1)
+		game.addVisual(protagonista)
 			// después de un ratito ...
 		game.schedule(2500, { game.clear()
 				// cambio de fondo

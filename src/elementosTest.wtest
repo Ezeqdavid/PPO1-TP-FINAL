@@ -19,4 +19,13 @@ describe "Test Elementos" {
 		
 		assert.equals(9, nivelMonedas.monedasEnNivel())
 	}
+	
+	test "cajas" {
+		game.addVisual(new Cofre(position = game.at(0,0)))
+		game.addVisual(new Cofre(position = game.at(0,0)))
+		game.addVisual(new Cofre(position = game.at(0,0)))
+		game.addVisual(new Cofre(position = game.at(0,0)))
+		
+		assert.equals(4, game.getObjectsIn(game.at(0,0)).size())
+	}
 }
